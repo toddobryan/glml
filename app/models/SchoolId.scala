@@ -47,3 +47,40 @@ class SchoolId {
   override def toString: String = "%s: %s".format(district.year.slug, school)
 
 }
+
+trait QSchoolId extends PersistableExpression[SchoolId] {
+  private[this] lazy val _id: NumericExpression[Long] = new NumericExpressionImpl[Long](this, "_id")
+  def id: NumericExpression[Long] = _id
+  
+  private[this] lazy val _glmlId: StringExpression = new StringExpressionImpl(this, "_glmlId")
+  def glmlId: StringExpression = _glmlId
+  
+  private[this] lazy val _school: ObjectExpression[School] = new ObjectExpressionImpl[School](this, "_school")
+  def school: ObjectExpression[School] = _school
+  
+  private[this] lazy val _district: ObjectExpression[District] = new ObjectExpressionImpl[District](this, "_district")
+  def district: ObjectExpression[District] = _district
+  
+  private[this] lazy val _coaches: CollectionExpression[java.util.Set[User], User] = new CollectionExpressionImpl[java.util.Set[User], User](this, "_coaches")
+  def coaches: CollectionExpression[java.util.Set[User], User] = _coaches
+}
+
+object QSchoolId {
+  def apply(parent: PersistableExpression[_], name: String, depth: Int): QSchoolId = {
+    new PersistableExpressionImpl[SchoolId](parent, name) with QSchoolId
+  }
+  
+  def apply(cls: Class[SchoolId], name: String, exprType: ExpressionType): QSchoolId = {
+    new PersistableExpressionImpl[SchoolId](cls, name, exprType) with QSchoolId
+  }
+  
+  private[this] lazy val jdoCandidate: QSchoolId = candidate("this")
+  
+  def candidate(name: String): QSchoolId = QSchoolId(null, name, 5)
+  
+  def candidate(): QSchoolId = jdoCandidate
+  
+  def parameter(name: String): QSchoolId = QSchoolId(classOf[SchoolId], name, ExpressionType.PARAMETER)
+  
+  def variable(name: String): QSchoolId = QSchoolId(classOf[SchoolId], name, ExpressionType.VARIABLE)
+}

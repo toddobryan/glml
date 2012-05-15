@@ -4,6 +4,8 @@ import javax.jdo.annotations._
 import org.datanucleus.query.typesafe._
 import org.datanucleus.api.jdo.query._
 
+// TODO: verify that it's a valid email address
+
 @PersistenceCapable(detachable="true")
 class Email {
 	private[this] var _value: String = _

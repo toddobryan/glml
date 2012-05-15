@@ -1,7 +1,6 @@
 package util
 
 import play.api.mvc.{Request, WrappedRequest}
-import models.users.User
 import play.api.mvc.Result
 import play.api.mvc.BodyParser
 import play.api.mvc.BodyParsers.parse

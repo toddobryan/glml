@@ -5,6 +5,7 @@ import org.datanucleus.query.typesafe._
 import org.datanucleus.api.jdo.query._
 
 //TODO: this should be stored as a hash, not plain text
+//TODO: "" means no password, so shouldn't match anything
 
 @PersistenceCapable(detachable="true")
 class Password {
