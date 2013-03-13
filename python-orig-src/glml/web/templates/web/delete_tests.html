@@ -1,0 +1,13 @@
+{% extends "web/base.html" %}
+
+{% block title %}Delete Tests{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{{ url_path }}">
+    <p>Are you sure you want to delete all tests from {{ test_date.date_string }}?</p>
+    <input type="submit" name="no" value="No" />
+    <input type="submit" name="yes" value="Yes" />
+</form>
+
+{% endblock %}

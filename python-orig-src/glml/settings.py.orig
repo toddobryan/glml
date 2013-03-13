@@ -1,0 +1,10 @@
+from pubsettings import *
+
+DATABASE_ENGINE = 'postgresql_psycopg2'
+DATABASE_NAME = 'glml'
+DATABASE_USER = 'glml'
+DATABASE_PASSWORD = 'rEmn96B93qzXOsJgF_09'
+SECRET_KEY = '586uq0hrzilEENjClD8lFFzwngQ9EJORwA0SzNKSabDZ18uOeL'
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG

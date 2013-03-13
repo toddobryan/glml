@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# This is a shell script that calls django-admin.py with the correct settings
+# and pythonpath for this project. Make sure that you set it to be executable
+#
+# $ cd ~/workspace/glml/src
+# $ chmod u+x django-admin
+#
+# will do it.
+#
+# To start from a clean database and run the server, do:
+#
+# $ ./django-admin resetall
+# $ ./django-admin runserver
+#
+# This is admittedly a bit of a pain, but we should eventually have it set up
+# so that you can just do
+#
+# $ ./django-admin test
+#
+# and all of the tests will be run automatically.
+#
+# Note that you only need to do "resetall" if the
+# database has gotten screwed up, so that will save some time between runs.
+PYTHON_VERSION="2.6"
+db="glml_$USER"
+
+# Remove all bytecode to ensure the environment on all computers is REALLY the same.
+chmod +x remove-stale-bytecode
+./remove-stale-bytecode
+
+if [ "$1" = "resetall" ]; then
+	dropdb "$db"
+	createdb "$db"
+	/usr/local/lib/python$PYTHON_VERSION/dist-packages/django/bin/django-admin.py syncdb --pythonpath=. --settings=glml.settings --noinput
+	# Make sure this is executable and save some headaches for people
+	chmod +x glml/manage.py
+	glml/manage.py loaddb --pythonpath=. --settings=glml.settings
+else
+	/usr/local/lib/python$PYTHON_VERSION/dist-packages/django/bin/django-admin.py "$@" --pythonpath=. --settings=glml.settings
+fi

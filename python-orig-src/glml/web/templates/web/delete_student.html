@@ -1,0 +1,13 @@
+{% extends "web/base.html" %}
+
+{% block title %}Delete {{ student_id.student.name }}{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{{ url_path }}">
+    <p>Are you sure you want to delete <b>{{ student_id.student.name }}</b> from {{ student_id.school_id.school.name }}'s {{ student_id.school_id.district.year }} GLML team?</p>
+    <input type="submit" name="no" value="No" />
+    <input type="submit" name="yes" value="Yes" />
+</form>
+
+{% endblock %}

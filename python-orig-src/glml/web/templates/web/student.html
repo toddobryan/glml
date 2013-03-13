@@ -1,0 +1,23 @@
+{% extends "web/base.html" %}
+
+{% block title %}{% if student %}Edit {{ student.name }}{% else %}Add a Student{% endif %}{% endblock %}
+
+{% block content %}
+
+<form method="post" action="{{ url_path }}">
+    <table>
+        {{ form }}
+        <tr>
+            <td><input type="submit" value="{% if student %}Edit{% else %}Add{% endif %} Student" /></td>
+            {% if student and student_id %}
+                {% ifequal working_year current_year %}
+                    {% if not student_id.test_set.count %}
+                        <td><input type="button" value="Delete Student" onclick="window.location.href='{% url glml.web.views.delete_student student_id.id %}'" /></td>
+                    {% endif %}
+                {% endifequal %}
+            {% endif %}
+        </tr>
+    </table>
+</form>
+
+{% endblock %}

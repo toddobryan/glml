@@ -1,0 +1,33 @@
+{% extends "web/base.html" %}
+
+{% block title %}Import Students{% endblock %}
+
+{% block content %}
+
+    <p><i>Note:</i> Grade is the grade for the new (current) season.</p>
+    <form method="post" action="{{ url_path }}">
+        <table class="info">
+            <tr>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>Import?</th>
+            </tr>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>
+                        <select name="{{ student.id }}_grade">
+                            <option value="9"{% ifequal student.grade 9 %} selected="selected"{% endifequal %}>9</option>
+                            <option value="10"{% ifequal student.grade 10 %} selected="selected"{% endifequal %}>10</option>
+                            <option value="11"{% ifequal student.grade 11 %} selected="selected"{% endifequal %}>11</option>
+                            <option value="12"{% ifequal student.grade 12 %} selected="selected"{% endifequal %}>12</option>
+                        </select>
+                    </td>
+                    <td><input type=checkbox name="{{ student.id }}" checked=checked /></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p><input type="submit" value="Import Students" /></p>
+    </form>
+
+{% endblock %}
