@@ -17,7 +17,7 @@ class Question {
   
   def id: Long = _id
   
-  def number: Integer = _number
+  def number: Int = _number
   def number_=(theNumber: Int) { _number = theNumber }
   
   def answer: String = _answer
