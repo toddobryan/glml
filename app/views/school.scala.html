@@ -1,0 +1,74 @@
+{% extends "web/base.html" %}
+
+{% block title %}{{ school }}{% endblock %}
+
+{% block content %}
+
+{% if school_id %}
+    <table class="info">
+        <tr>
+            <th>District</th>
+            <td>{{ school_id.district.glml_id }}</td>
+        </tr>
+        <tr>
+            <th>{{ school_id.coach_word }}</th>
+            <td>
+                {% if school_id.coaches_str %}
+                    {% for coach in school_id.coaches_str %}
+                        {{ coach|safe }}
+                        {% if not for_loop.last %}
+                            <br />
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    None
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    {% if students %}
+        <h3>Students</h3>
+        <table class="info">
+            <tr>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>ID</th>
+                {% for test_date in test_dates %}
+                    <th><a href="{% url glml.web.views.compare test_date.id %}">{{ test_date.date_string }}</a></th>
+                {% endfor %}
+            </tr>
+            {% for student in students %}
+                <tr>
+                    <td><a href="{% url edit_student student.student_id.id %}">{{ student.student_id.student.name }}</a></td>
+                    <td>{{ student.student_id.grade }}</td>
+                    <td>{{ student.student_id.glml_id }}</td>
+                    {% for test in student.tests %}
+                        {% if test %}
+                            <td>{{ test.score }}</td>
+                        {% else %}
+                            <td>Did Not Take</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>There {% ifequal working_year current_year %}a{% else %}we{% endifequal %}re no students for {{ school }} for the {{ working_year }} season.</p>
+    {% endif %}
+    {% ifequal working_year current_year %}
+        {% if can_import %}
+            <p><a href="{% url glml.web.views.import_students %}">Import students.</a></p>
+        {% endif %}
+        <p><a href="{% url glml.web.views.student_view %}">Add a student.</a></p>
+    {% endifequal %}
+{% else %}
+    <p>{{ school }}
+    {% ifequal working_year current_year %}
+    is not participating
+    {% else %}
+    did not participate
+    {% endifequal %}
+    in GLML during the {{ working_year }} season.</p>
+{% endif %}
+
+{% endblock %}

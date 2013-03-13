@@ -1,0 +1,40 @@
+{% extends "web/base.html" %}
+
+{% load glmltags %}
+
+{% block title %}{{ test_date.date_string }}{% endblock %}
+
+{% block content %}
+
+{% if tests %}
+<table class="info">
+    <tr>
+        <th>&nbsp;</th>
+        {% for number in numbers %}
+            <th>{{ number }}</th>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>Key</th>
+        {% for number in numbers %}
+            <th>{{ key.questions|hash:number }}</th>
+        {% endfor %}
+    </tr>
+    {% for test in tests %}
+        <tr>
+            <td>{{ test.name }}</td>
+            {% for number in numbers %}
+                <td>{{ test.questions|hash:number }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% else %}
+    <p>There are no tests.</p>
+{% endif %}
+
+{% if test_date.pdf %}
+    <p><a href="{{ test_date.pdf }}" class="pdf">Download PDF</a></p>
+{% endif %}
+
+{% endblock %}

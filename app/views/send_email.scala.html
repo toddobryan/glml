@@ -1,0 +1,31 @@
+{% extends "web/base.html" %}
+
+{% load glmltags %}
+
+{% block title %}Email {% if user.is_superuser %}Coaches{% else %}Administrators{% endif %}{% endblock %}
+
+{% block content %}
+
+{% if user.is_superuser %}
+    <script type="text/javascript">
+        function mySelect(selectBox, isSelected) {
+            for (var i = 0; i < selectBox.options.length; i++) {
+                selectBox.options[i].selected = isSelected;
+            }
+        }
+    </script>
+    <input type="button" value="Select All" onclick="mySelect(document.getElementById('id_recipients'), true)" />
+    <input type="button" value="Select None" onclick="mySelect(document.getElementById('id_recipients'), false)" />
+{% endif %}
+
+<form method="post" action="{{ url_path }}">
+    <table>
+        {{ form }}
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Send" /></td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
