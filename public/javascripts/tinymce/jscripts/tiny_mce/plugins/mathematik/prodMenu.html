@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Insert Product</title>
+    <script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+    <script type="text/javascript">
+        (function() {
+            //inserts the finished LaTeX for the desired product into the main math editor menu
+            window.finish = function() {
+                var ed = tinyMCEPopup.editor;
+                var str = '\\prod_{' + document.forms[0].bottom.value + '}^{' + document.forms[0].top.value + '}{' + document.forms[0].term.value + '}';
+                ed.execCommand('mceInsertContent', false, str);
+                tinyMCEPopup.close();
+            }
+        })();
+    </script>
+</head>
+<body>
+
+<form>
+    <p>Create a product:</p>
+    <p>Top: <input id="top" name="top" type="text" class="text" /></p>
+    <p>Bottom: <input id="bottom" name="bottom" type="text" class="text" /></p>
+    <p>Term: <input id="term" name="term" type="text" class="text" /></p>
+
+    <div class="mceActionPanel">
+		<input type="button" id="insert" name="insert" value="Insert" onclick="finish();" />
+		<input type="button" id="cancel" name="cancel" value="Cancel" onclick="tinyMCEPopup.close();" />
+	</div>
+</form>
+
+</body>
+</html>
