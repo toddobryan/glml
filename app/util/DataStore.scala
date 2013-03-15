@@ -1,6 +1,6 @@
 package util
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import javax.jdo.JDOHelper
 import org.datanucleus.api.jdo.JDOPersistenceManager
 import org.datanucleus.query.typesafe.{BooleanExpression, OrderExpression, TypesafeQuery}
@@ -10,6 +10,10 @@ import javax.jdo.PersistenceManagerFactory
 import org.datanucleus.api.jdo.query.JDOTypesafeQuery
 import javax.jdo.PersistenceManager
 import javax.jdo.spi.PersistenceCapable
+import org.datanucleus.query.typesafe.Expression
+import javax.jdo.Extent
+import javax.jdo.Query
+import org.datanucleus.query.typesafe.TypesafeSubquery
 
 object DataStore {
   private[this] var _pmf: Option[JDOPersistenceManagerFactory] = None
@@ -43,6 +47,11 @@ object DataStore {
     val r = block(pm)
     pm.commitTransactionAndClose()
     r
+  }
+  
+  def execute[A](block: (ScalaPersistenceManager => A))(implicit pm: ScalaPersistenceManager): A = {
+    if (pm != null) block(pm)
+    else DataStore.withTransaction( tpm => block(tpm) )
   }
 }
 
@@ -80,13 +89,27 @@ class ScalaPersistenceManager(val jpm: JDOPersistenceManager) {
     jpm.close()
   }
   
+  def deletePersistent[T](dataObj: T) {
+    jpm.deletePersistent(dataObj)
+  }
+  
+  def deletePersistentAll[T](dataObjs: Seq[T]) {
+    jpm.deletePersistentAll(dataObjs.asJava)
+  }
+  
   def makePersistent[T](dataObj: T): T = { // TODO: can this be PersistenceCapable
     jpm.makePersistent[T](dataObj)
   }
   
-  def makePersistentAll[T](dataObjs: Iterable[T]): Iterable[T] = {
-    jpm.makePersistentAll[T](dataObjs)
+  def makePersistentAll[T](dataObjs: Seq[T]): Seq[T] = {
+    jpm.makePersistentAll[T](dataObjs.asJava).asScala.toList
   }
+  
+  def extent[T: ClassManifest](includeSubclasses: Boolean = true): Extent[T] = {
+    jpm.getExtent[T](classManifest[T].erasure.asInstanceOf[Class[T]], includeSubclasses)
+  }
+  
+  def newQuery[T](extent: Extent[T]): Query = jpm.newQuery(extent)
   
   def query[T: ClassManifest](): ScalaQuery[T] = ScalaQuery[T](jpm)
   
@@ -110,8 +133,15 @@ class ScalaQuery[T](val query: TypesafeQuery[T]) {
   }
   
   def executeList(): List[T] = {
-    import scala.collection.JavaConverters._
     query.executeList().asScala.toList
+  }
+  
+  def executeResultList[R](distinct: Boolean, expr: Expression[R])(implicit man: Manifest[R]): List[R] = {
+    query.executeResultList[R](classManifest[R].erasure.asInstanceOf[Class[R]], distinct, expr).asScala.toList
+  }
+  
+  def executeResultUnique[R](distinct: Boolean, expr: Expression[R])(implicit man: Manifest[R]): R = {
+    query.executeResultUnique[R](classManifest[R].erasure.asInstanceOf[Class[R]], distinct, expr)
   }
   
   def filter(expr: BooleanExpression): ScalaQuery[T] = {
@@ -120,6 +150,18 @@ class ScalaQuery[T](val query: TypesafeQuery[T]) {
   
   def orderBy(orderExpr: OrderExpression[_]*): ScalaQuery[T] = {
     ScalaQuery[T](query.orderBy(orderExpr: _*))
+  }
+  
+  def excludeSubclasses(): ScalaQuery[T] = {
+    ScalaQuery[T](query.excludeSubclasses())
+  }
+  
+  def includeSubclasses(): ScalaQuery[T] = {
+    ScalaQuery[T](query.includeSubclasses())
+  }
+  
+  def subquery[R](alias: String)(implicit man: Manifest[R]): TypesafeSubquery[R] = {
+    query.subquery(classManifest[R].erasure.asInstanceOf[Class[R]], alias)
   }
 }
 

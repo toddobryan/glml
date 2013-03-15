@@ -2,10 +2,14 @@
 
 @main("GLML Scores") {
 
-{% block title %}GLML Scores{% endblock %}
+<h1>GLML Scores</h1>
 
-{% block content %}
+<div class="hero-unit">
+  <h1>@message</h1>
+  <p>OH GOD IM TRAPPED IN HERE SOMEONE HELP PLEASE!</p>
+</div>
 
+@*
 @if (test_dates) {
     <div id="nav">
         <ul class="home">
@@ -17,9 +21,9 @@
             @for (test_date2 in test_dates) {
                 <li>
                     @if (test_date == test_date2) {
-                        <strong>{{ test_date.date_string }}</strong>
+                        <strong> @test_date.date_string </strong>
                     } else {
-                        <a href="{% url home_by_date test_date2.date.year,test_date2.date.month,test_date2.date.day %}">{{ test_date2.date_string }}</a>
+                        <a href="{% url home_by_date test_date2.date.year,test_date2.date.month,test_date2.date.day %}">@test_date2.date_string</a>
                     }
                 </li>
             }
@@ -27,7 +31,7 @@
         <br />
         <ul class="home">
             @for (entry in data) {
-                <li><a href="#{{ entry.district.glml_id }}">District {{ entry.district.glml_id }}</a></li>
+                <li><a href="#@entry.district.glml_id">District @entry.district.glml_id</a></li>
             }
         </ul>
         <br />
@@ -37,13 +41,13 @@
         <br />
         @if (test_date && test_date.pdf) {
             <ul class="home">
-                <li><a href="{{ test_date.pdf }}" class="pdf">Download PDF</a></li>
+                <li><a href="@test_date.pdf" class="pdf">Download PDF</a></li>
             </ul>
         }
     </div>
     <div style="margin: 0 auto; width: 500px">
         @for (entry in data) {
-            <h1><a name="{{ entry.district.glml_id }}">District {{ entry.district.glml_id }}</a></h1>
+            <h1><a name="@entry.district.glml_id">District @entry.district.glml_id</a></h1>
             <table class="info" style="width: 100%">
                 <caption>Top Schools</caption>
                 <tr>
@@ -53,23 +57,23 @@
                 </tr>
                 @for (school in entry.schools) {
                     <tr>
-                        <td>{{ school.name }}</td>
+                        <td>@school.name</td>
                         <td>
                             @for (coach in school.coaches) {
-                                {{ coach }}
+                                @coach
                                 {% if not forloop.last %}
                                     <br />
                                 {% endif %}
                             }
                         </td>
-                        <td>{{ school.score|floatformat:2 }}</td>
+                        <td>@school.score|floatformat:2</td>
                     </tr>
                 }
             </table>
             @for (grade in entry.students) {
                 <br />
                 <table class="info" style="width: 100%">
-                    <caption>Top {{ grade.grade }}th Grade Students</caption>
+                    <caption>Top @grade.gradeth Grade Students</caption>
                     <tr>
                         <th>Place</th>
                         <th>Student</th>
@@ -80,11 +84,11 @@
                         @for (student in place.students) {
                             <tr>
                                 {% if forloop.first %}
-                                    <td{% ifnotequal place.length 1 %} rowspan="{{ place.length }}"{% endifnotequal %}>{{ place.place }}</td>
+                                    <td{% ifnotequal place.length 1 %} rowspan="@place.length"{% endifnotequal %}>@place.place</td>
                                 {% endif %}
-                                <td>{{ student.student_id.student.name }}</td>
-                                <td>{{ student.student_id.school_id.school.name }}</td>
-                                <td>{{ student.score|floatformat:2 }}</td>
+                                <td> @student.student_id.student.name </td>
+                                <td> @student.student_id.school_id.school.name </td>
+                                <td> @student.score|floatformat:2 </td>
                             </tr>
                         }
                     }
@@ -95,7 +99,5 @@
 } else {
     <p>There are no test dates for the selected year.</p>
 }
-
-{% endblock %}
-    
+*@
 }
