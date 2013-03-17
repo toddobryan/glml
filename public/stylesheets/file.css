@@ -1,0 +1,39 @@
+div#editor { 
+    position: relative;
+    width: 600px;
+    height: 200px;
+    background: #FFFFFF;
+    border-style: solid;
+    border-width: 2px;
+}
+
+#compileButton {
+    margin-left: 467px;
+}
+
+#file {
+    margin-bottom: 10px;
+}
+
+#interactions { 
+    position: relative;
+    width: 600px;
+    height: 20px;
+    background: #FFFFFF;
+    border-style: solid;
+    border-width: 2px;
+}
+
+#prev-content {
+	padding-top:10px;
+	font-size:18px;
+	position:relative;
+}
+
+#prev-content div, #entry {
+	display: inline;
+}
+
+.hidden {
+	display: none;
+}

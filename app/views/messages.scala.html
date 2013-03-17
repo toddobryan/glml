@@ -1,0 +1,22 @@
+@()(implicit flash: Flash)
+
+@import scala.xml.NodeSeq
+
+@(
+if (flash.isEmpty) NodeSeq.Empty
+else {
+  val (css: String, text: String, msg: String) = flash.get("error") match {
+    case Some(error) => ("alert alert-error", "Error!", error)
+    case _ => flash.get("warning") match {
+      case Some(warning) => ("alert", "Warning!", warning)
+      case _ => flash.get("success") match {
+        case Some(success) => ("alert alert-success", "Success!", success)
+        case _ => ("alert alert-error", "Error!", "Something strange happened.")
+      }
+    }
+  } 
+  <div class={ css }>
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>{ text }</strong> { msg }
+  </div>
+})

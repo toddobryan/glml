@@ -2,13 +2,12 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import util.{DataStore, ScalaPersistenceManager}
-import util.DbAction
+import models.auth.VisitAction
 
 object Application extends Controller {
   
-  def index = Action {
-    Ok(views.html.index("Random test string..."))
+  def index = VisitAction { implicit req =>
+    Ok(views.html.index("Your new application is ready."))
   }
   
 }

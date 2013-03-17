@@ -1,0 +1,20 @@
+@(form: play.api.data.Form[_], action: play.api.mvc.Call, 
+  cancel: Boolean, args: (Symbol, String)*)(body: play.api.templates.Html)
+
+@import views.html.helper
+
+@helper.form(action, args: _*) {
+<table>
+@body
+@if(!form.errors.isEmpty) {
+  <tr>
+    <td></td>
+    <td><ul class="errorList">@form.errors.map { error => <li class="error">@error.message</li> }</ul></td>
+  </tr>
+} 
+</table>
+<input type="submit" value="Submit" />
+@if(cancel) {
+<a href="/index">Cancel</a>
+}
+}

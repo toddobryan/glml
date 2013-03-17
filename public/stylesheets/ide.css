@@ -1,0 +1,17 @@
+#editor { 
+    position: relative;
+    width: 500px;
+    height: 20px;
+    background: #FFFFFF;
+    border-style: solid;
+    border-width: 2px;
+}
+
+#prev-content {
+	font-size:18px;
+	position:relative;
+}
+
+#prev-content div, #entry {
+	display: inline;
+}

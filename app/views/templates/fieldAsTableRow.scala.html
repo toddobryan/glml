@@ -1,0 +1,18 @@
+@(elements: helper.FieldElements)
+
+@import util.Helpers.camel2TitleCase
+
+<tr>
+  <td>
+    <label for="@elements.id">@camel2TitleCase(elements.label.asInstanceOf[String])</label>
+  </td>
+  <td>
+    @elements.input
+    @if(elements.hasErrors) {
+    <br/><span class="help-inline">@elements.errors.mkString(", ")</span>
+    }
+    @if(elements.infos.size > 0) {
+    <br/><span class="help-inline">@elements.infos.mkString(", ")</span>
+    }
+  </td>
+</tr>

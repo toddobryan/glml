@@ -1,103 +1,26 @@
-@(message: String)
+@(message: String)(implicit req: models.auth.VisitRequest[_])
 
 @main("GLML Scores") {
+  <div class="row">
 
-<h1>GLML Scores</h1>
-
-<div class="hero-unit">
-  <h1>@message</h1>
-  <p>OH GOD IM TRAPPED IN HERE SOMEONE HELP PLEASE!</p>
-</div>
-
-@*
-@if (test_dates) {
-    <div id="nav">
-        <ul class="home">
-            @if (test_date) {
-                <li><a href="{% url glml.web.views.home %}">Cumulative</a></li>
-            } else {
-                <li><strong>Cumulative</strong></li>
-            }
-            @for (test_date2 in test_dates) {
-                <li>
-                    @if (test_date == test_date2) {
-                        <strong> @test_date.date_string </strong>
-                    } else {
-                        <a href="{% url home_by_date test_date2.date.year,test_date2.date.month,test_date2.date.day %}">@test_date2.date_string</a>
-                    }
-                </li>
-            }
-        </ul>
-        <br />
-        <ul class="home">
-            @for (entry in data) {
-                <li><a href="#@entry.district.glml_id">District @entry.district.glml_id</a></li>
-            }
-        </ul>
-        <br />
-        <ul class="home">
-            <li><a href="#top">&uarr; Top</a></li>
-        </ul>
-        <br />
-        @if (test_date && test_date.pdf) {
-            <ul class="home">
-                <li><a href="@test_date.pdf" class="pdf">Download PDF</a></li>
-            </ul>
-        }
+  <!-- Side bar -->
+    <div class="span3 bs-docs-sidebar">
+      <ul class="nav nav-list bs-docs-sidenav">
+        <li class="nav-header">Districts</li>
+        <li><a href="#1"><i class="icon-chevron-right"></i> All</a></li>
+        <li><a href="#1"><i class="icon-chevron-right"></i> (districts)</a></li>
+        <li class="divider"></li>
+        <li class="nav-header">Cumulative</li>
+        <li><a href="#date"><i class="icon-chevron-right"></i> (test dates)</a></li>
+        <li class="divider"></li>
+        <li><a href="#top"><i class="icon-chevron-right"></i> &uarr; Top</a></li>
+      </ul>
     </div>
-    <div style="margin: 0 auto; width: 500px">
-        @for (entry in data) {
-            <h1><a name="@entry.district.glml_id">District @entry.district.glml_id</a></h1>
-            <table class="info" style="width: 100%">
-                <caption>Top Schools</caption>
-                <tr>
-                    <th>School</th>
-                    <th>Coach</th>
-                    <th>Score</th>
-                </tr>
-                @for (school in entry.schools) {
-                    <tr>
-                        <td>@school.name</td>
-                        <td>
-                            @for (coach in school.coaches) {
-                                @coach
-                                {% if not forloop.last %}
-                                    <br />
-                                {% endif %}
-                            }
-                        </td>
-                        <td>@school.score|floatformat:2</td>
-                    </tr>
-                }
-            </table>
-            @for (grade in entry.students) {
-                <br />
-                <table class="info" style="width: 100%">
-                    <caption>Top @grade.gradeth Grade Students</caption>
-                    <tr>
-                        <th>Place</th>
-                        <th>Student</th>
-                        <th>School</th>
-                        <th>Score</th>
-                    </tr>
-                    @for (place in grade.place_list) {
-                        @for (student in place.students) {
-                            <tr>
-                                {% if forloop.first %}
-                                    <td{% ifnotequal place.length 1 %} rowspan="@place.length"{% endifnotequal %}>@place.place</td>
-                                {% endif %}
-                                <td> @student.student_id.student.name </td>
-                                <td> @student.student_id.school_id.school.name </td>
-                                <td> @student.score|floatformat:2 </td>
-                            </tr>
-                        }
-                    }
-                </table>
-            }
-        }
+    
+  <!-- Body -->
+    <div class="span9">
+      <p> blah blah </p>
     </div>
-} else {
-    <p>There are no test dates for the selected year.</p>
-}
-*@
+        
+  </div>  
 }

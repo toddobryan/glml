@@ -5,5 +5,20 @@
 # Home page
 GET     /                           controllers.Application.index
 
+# Auth
+GET     /login                      controllers.Auth.login
+POST    /login                      controllers.Auth.login
+GET     /logout                     controllers.Auth.logout
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+GET     /ide                        controllers.WebScala.ide
+POST    /interpret                  controllers.WebScala.interpret
+GET     /compile/:id                controllers.WebScala.compile(id: Long)
+POST    /compile/:id                controllers.WebScala.compile(id: Long)
+
+# Files
+GET     /createFile					controllers.WebScala.newFile
+POST    /createFile                 controllers.WebScala.newFile
+GET		/file/:id					controllers.WebScala.showFile(id: Long)
