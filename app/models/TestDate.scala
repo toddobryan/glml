@@ -14,6 +14,12 @@ class TestDate {
   private[this] var _date: java.sql.Date = _
   private[this] var _year: Year = _
   
+  def this(date: LocalDate, year: Year) {
+    this()
+    date_=(date)
+    year_=(year)
+  }
+  
   def id: Int = _id
   
   def date: LocalDate = new DateTime(_date).toLocalDate
@@ -22,6 +28,7 @@ class TestDate {
   }
   
   def year: Year = _year
+  def year_=(theYear: Year) { _year = theYear }
   
   override def toString: String = "%s: %s".format(year.slug, date)
 }

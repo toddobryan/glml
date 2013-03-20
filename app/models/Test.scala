@@ -16,6 +16,13 @@ class Test {
   @Column(length=4, scale=2)
   private[this] var _score: java.math.BigDecimal = _
   
+  def this(testDate: TestDate, studentId: StudentId, score: Double) = {
+    this()
+    testDate_=(testDate)
+    studentId_=(studentId)
+    score_=(score)
+  }
+  
   def id: Long = _id
   
   def testDate: TestDate = _testDate

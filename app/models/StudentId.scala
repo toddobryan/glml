@@ -18,9 +18,18 @@ class StudentId {
   private[this] var _schoolId: SchoolId = _
   private[this] var _grade: Int = _
   
+  def this(glmlId: String, student: Student, schoolId: SchoolId, grade: Int) {
+    this()
+    glmlId_=(glmlId)
+    student_=(student)
+    schoolId_=(schoolId)
+    grade_=(grade)
+  }
+  
   def id: Long = _id
   
   def glmlId: String = _glmlId
+  def glmlId_=(theId: String) { _glmlId = theId }
   
   def student: Student = _student
   def student_=(theStudent: Student) { _student = theStudent }

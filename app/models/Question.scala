@@ -15,6 +15,13 @@ class Question {
   private[this] var _answer: String = _
   private[this] var _test: Test = _
   
+  def this(number: Int, answer: String, test: Test) = {
+    this()
+    number_=(number)
+    answer_=(answer)
+    test_=(test)
+  }
+  
   def id: Long = _id
   
   def number: Int = _number
