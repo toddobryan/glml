@@ -2,6 +2,9 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.query.typesafe._
 import org.datanucleus.api.jdo.query._
+import javax.jdo.JDOHelper
+import util.ScalaPersistenceManager
+import util.DataStore
 
 case class SchoolInfo(name: String, score: Double, coaches: String)
 
@@ -30,8 +33,13 @@ class District {
   def year: Year = _year
   def year_=(theYear: Year) { _year = theYear }
   
-  def getTopSchools(testDate: Option[TestDate]): List[SchoolInfo] = {
-    Nil //TODO
+  def getTopSchools(testDate: Option[TestDate])(implicit pm: ScalaPersistenceManager = null): List[SchoolId] = {
+    def query(epm: ScalaPersistenceManager): List[SchoolId] = {
+    	val cand = QSchoolId.candidate
+    	pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
+    }
+    if (pm != null) query(pm)
+    else DataStore.withTransaction( tpm => query(tpm) )
   }
   
   def getTopStudents(testDate: Option[TestDate]): List[Nothing] = {
