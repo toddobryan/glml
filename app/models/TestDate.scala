@@ -30,6 +30,10 @@ class TestDate {
   def year: Year = _year
   def year_=(theYear: Year) { _year = theYear }
   
+  def getKey {} //TODO
+  
+  def pdf {} //TODO
+  
   override def toString: String = "%s: %s".format(year.slug, date)
 }
 
