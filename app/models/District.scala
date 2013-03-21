@@ -36,7 +36,7 @@ class District {
   def getTopSchools(testDate: Option[TestDate])(implicit pm: ScalaPersistenceManager = null): List[SchoolId] = {
     def query(epm: ScalaPersistenceManager): List[SchoolId] = {
     	val cand = QSchoolId.candidate
-    	pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
+    	pm.query[SchoolId].filter(cand.districtId.equalsIgnoreCase(this.glmlId)).executeList()
     }
     if (pm != null) query(pm)
     else DataStore.withTransaction( tpm => query(tpm) )

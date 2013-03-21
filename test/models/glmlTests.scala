@@ -1,10 +1,10 @@
-package models.conferences
+package models
 
 import models._
 import org.joda.time.LocalDate
 import org.scalatest.FunSuite
 
-class glmlTest extends FunSuite {
+class glmlTests extends FunSuite {
 	// Years
     val year2011 = new Year(2011)
     val year2012 = new Year(2012)
@@ -71,9 +71,7 @@ class glmlTest extends FunSuite {
     val test13 = new Test(date1, stuId7, 75)
     val test14 = new Test(date2, stuId7, 65)
     
-	/*
-	test("District.getTopSchools") {
-		assert(district1.getTopSchools(None) === )
+    test("District.getTopSchools") {
+		assert(district1.getTopSchools(None) === List("test"))
 	}
-	*/
 }
