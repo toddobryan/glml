@@ -1,3 +1,4 @@
+bin
 logs
 project/project
 project/target
@@ -9,3 +10,5 @@ tmp
 .project
 .history
 dist
+*.db
+.target

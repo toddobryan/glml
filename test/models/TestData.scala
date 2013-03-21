@@ -9,25 +9,20 @@ import org.joda.time.LocalDate
 import javax.jdo.annotations.Inheritance
 import javax.jdo.annotations.PersistenceCapable
 import javax.jdo.annotations.Unique
-import util.DataStore
-import util.ScalaPersistenceManager
+import scalajdo.DataStore
+import scalajdo.ScalaPersistenceManager
 
 object TestData {
   def load(debug: Boolean = false) {
     val dbFile = new File("data.h2.db")
-    dbFile.delete()
-    DataStore.withManager { implicit pm =>
-      loadGlmlData(debug)
-      pm.close()
-    }
+    if (dbFile.exists) dbFile.delete()
+    loadGlmlData(debug)
+    DataStore.pm.close()
   }
 
-  def loadGlmlData(debug: Boolean = false)(implicit pm: ScalaPersistenceManager) {
+  def loadGlmlData(debug: Boolean = false) {
     if(debug) println("Creating glml...")
-    loadDistricts(debug)
-  }
-  
-  def loadDistricts(debug: Boolean)(implicit pm: ScalaPersistenceManager) {
+    
     // Years
     if(debug) println("Creating years...")
     val year2011 = new Year(2011)
@@ -35,8 +30,8 @@ object TestData {
     
     // Districts
     if(debug) println("Creating districs...")
-    val district1 = new District("District 1", year2012)
-    val district2 = new District("District 2", year2012)
+    val district1 = new District("1", year2012)
+    val district2 = new District("2", year2012)
     
     // Schools
     if(debug) println("Creating schools...")
@@ -102,6 +97,57 @@ object TestData {
     val test12 = new Test(date2, stuId6, 60)
     val test13 = new Test(date1, stuId7, 75)
     val test14 = new Test(date2, stuId7, 65)
+    
+    DataStore.withTransaction{ pm => 
+      pm.makePersistent(year2011)
+      pm.makePersistent(year2012)
+      pm.makePersistent(district1)
+      pm.makePersistent(district2)
+      pm.makePersistent(school1)
+      pm.makePersistent(school2)
+      pm.makePersistent(school3)
+      pm.makePersistent(school4)
+      pm.makePersistent(coach1)
+      pm.makePersistent(coach2)
+      pm.makePersistent(coach3)
+      pm.makePersistent(coach4)
+      pm.makePersistent(coach5)
+      pm.makePersistent(coach6)
+      pm.makePersistent(schId1)
+      pm.makePersistent(schId2)
+      pm.makePersistent(schId3)
+      pm.makePersistent(schId4)
+      pm.makePersistent(student1)
+      pm.makePersistent(student2)
+      pm.makePersistent(student3)
+      pm.makePersistent(student4)
+      pm.makePersistent(student5)
+      pm.makePersistent(student6)
+      pm.makePersistent(student7)
+      pm.makePersistent(stuId1)
+      pm.makePersistent(stuId2)
+      pm.makePersistent(stuId3)
+      pm.makePersistent(stuId4)
+      pm.makePersistent(stuId5)
+      pm.makePersistent(stuId6)
+      pm.makePersistent(stuId7)
+      pm.makePersistent(date1)
+      pm.makePersistent(date2)
+      pm.makePersistent(test1)
+      pm.makePersistent(test2)
+      pm.makePersistent(test3)
+      pm.makePersistent(test4)
+      pm.makePersistent(test5)
+      pm.makePersistent(test6)
+      pm.makePersistent(test7)
+      pm.makePersistent(test8)
+      pm.makePersistent(test9)
+      pm.makePersistent(test10)
+      pm.makePersistent(test11)
+      pm.makePersistent(test12)
+      pm.makePersistent(test13)
+      pm.makePersistent(test14)
+    }
   }
   
 }

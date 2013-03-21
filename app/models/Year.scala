@@ -3,7 +3,7 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.query.typesafe._
 import org.datanucleus.api.jdo.query._
-import util.ScalaPersistenceManager
+import scalajdo.DataStore
 
 @PersistenceCapable(detachable="true")
 class Year {
@@ -32,7 +32,8 @@ class Year {
 }
 
 object Year {
-  def currentYear(implicit pm: ScalaPersistenceManager): Year = {
+  def currentYear: Year = {
+    val pm = DataStore.pm
     val cand = QYear.candidate
     val years: List[Year] = pm.query[Year].orderBy(cand.start.desc).executeList()
     if (!years.isEmpty) years(0) else throw new Exception("There is no current year!")

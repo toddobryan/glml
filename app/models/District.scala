@@ -3,8 +3,8 @@ import javax.jdo.annotations._
 import org.datanucleus.query.typesafe._
 import org.datanucleus.api.jdo.query._
 import javax.jdo.JDOHelper
-import util.ScalaPersistenceManager
-import util.DataStore
+import scalajdo.ScalaPersistenceManager
+import scalajdo.DataStore
 
 case class SchoolInfo(name: String, score: Double, coaches: String)
 
@@ -33,13 +33,11 @@ class District {
   def year: Year = _year
   def year_=(theYear: Year) { _year = theYear }
   
-  def getTopSchools(testDate: Option[TestDate])(implicit pm: ScalaPersistenceManager = null): List[SchoolId] = {
-    def query(epm: ScalaPersistenceManager): List[SchoolId] = {
-    	val cand = QSchoolId.candidate
-    	pm.query[SchoolId].filter(cand.districtId.equalsIgnoreCase(this.glmlId)).executeList()
-    }
-    if (pm != null) query(pm)
-    else DataStore.withTransaction( tpm => query(tpm) )
+  def getTopSchools(testDate: Option[TestDate]): List[SchoolId] = {
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QSchoolId.candidate
+    val schoolIds = pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
+    schoolIds
   }
   
   def getTopStudents(testDate: Option[TestDate]): List[Nothing] = {

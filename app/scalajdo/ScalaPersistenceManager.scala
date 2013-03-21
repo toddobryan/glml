@@ -15,6 +15,10 @@ class ScalaPersistenceManager(val jpm: JDOPersistenceManager) {
     jpm.currentTransaction.commit()
   }
   
+  def rollback() {
+    jpm.currentTransaction.rollback()
+  }
+  
   def commitTransaction() {
     try {
       jpm.currentTransaction.commit()
