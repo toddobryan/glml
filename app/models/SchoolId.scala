@@ -18,7 +18,6 @@ class SchoolId {
   private[this] var _glmlId: String = _
   private[this] var _school: School = _
   private[this] var _district: District = _
-  private[this] var _districtId: String = _
   @Element(types=Array(classOf[User]))
   @Join
   private[this] var _coaches: java.util.Set[User] = _
@@ -29,7 +28,6 @@ class SchoolId {
     school_=(school)
     district_=(district)
     coaches_=(coaches)
-    _districtId = district.glmlId
   }
   
   def id: Long = _id
@@ -62,9 +60,6 @@ trait QSchoolId extends PersistableExpression[SchoolId] {
   
   private[this] lazy val _district: ObjectExpression[District] = new ObjectExpressionImpl[District](this, "_district")
   def district: ObjectExpression[District] = _district
-  
-  private[this] lazy val _districtId: StringExpression = new StringExpressionImpl(this, "_districtId")
-  def districtId: StringExpression = _districtId
   
   private[this] lazy val _coaches: CollectionExpression[java.util.Set[User], User] = new CollectionExpressionImpl[java.util.Set[User], User](this, "_coaches")
   def coaches: CollectionExpression[java.util.Set[User], User] = _coaches

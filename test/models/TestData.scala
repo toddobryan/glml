@@ -51,10 +51,10 @@ object TestData {
 
     // School IDs
     if(debug) println("Creating schools IDs...")
-    val schId1 = new SchoolId("999999", school1, district1, Set(coach1))
-    val schId2 = new SchoolId("888888", school2, district1, Set(coach5))
-    val schId3 = new SchoolId("777777", school3, district1, Set(coach2, coach3, coach4))
-    val schId4 = new SchoolId("666666", school4, district2, Set(coach6))
+    val schId1 = new SchoolId("01", school1, district1, Set(coach1))
+    val schId2 = new SchoolId("02", school2, district1, Set(coach5))
+    val schId3 = new SchoolId("03", school3, district1, Set(coach2, coach3, coach4))
+    val schId4 = new SchoolId("04", school4, district2, Set(coach6))
 
     // Students
     if(debug) println("Creating students...")
@@ -98,6 +98,8 @@ object TestData {
     val test13 = new Test(date1, stuId7, 75)
     val test14 = new Test(date2, stuId7, 65)
     
+    // Making everything persistent
+    if(debug) println("Creating persistent objects...")
     DataStore.withTransaction{ pm => 
       pm.makePersistent(year2011)
       pm.makePersistent(year2012)
