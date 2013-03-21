@@ -12,6 +12,7 @@ class Test {
   private[this] var _id: Long = _
   private[this] var _testDate: TestDate = _
   private[this] var _studentId: StudentId = _
+  private[this] var _studentSchoolId: SchoolId = _
   @Persistent
   @Column(length=4, scale=2)
   private[this] var _score: java.math.BigDecimal = _
@@ -21,6 +22,7 @@ class Test {
     testDate_=(testDate)
     studentId_=(studentId)
     score_=(score)
+    _studentSchoolId = studentId.schoolId
   }
   
   def id: Long = _id
@@ -46,13 +48,16 @@ trait QTest extends PersistableExpression[Test] {
   def id: NumericExpression[Long] = _id
   
   private[this] lazy val _testDate: ObjectExpression[TestDate] = new ObjectExpressionImpl[TestDate](this, "_testDate")
-  def school: ObjectExpression[TestDate] = _testDate
+  def testDate: ObjectExpression[TestDate] = _testDate
   
   private[this] lazy val _studentId: ObjectExpression[StudentId] = new ObjectExpressionImpl[StudentId](this, "_studentId")
   def studentId: ObjectExpression[StudentId] = _studentId
   
+  private[this] lazy val _studentSchoolId: ObjectExpression[SchoolId] = new ObjectExpressionImpl[SchoolId](this, "_studentSchoolId")
+  def studentSchoolId: ObjectExpression[SchoolId] = _studentSchoolId
+  
   private[this] lazy val _score: NumericExpression[java.math.BigDecimal] = new NumericExpressionImpl[java.math.BigDecimal](this, "_score")
-  def coaches: NumericExpression[java.math.BigDecimal] = _score
+  def score: NumericExpression[java.math.BigDecimal] = _score
 }
 
 object QTest {

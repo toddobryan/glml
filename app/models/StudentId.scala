@@ -3,6 +3,7 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
+import java.math.BigDecimal
 
 @PersistenceCapable(detachable="true")
 @Uniques(Array(
@@ -40,8 +41,8 @@ class StudentId {
   def grade: Int = _grade
   def grade_=(theGrade: Int) { _grade = theGrade }
   
-  def getCumulativeScore: Double = {
-    0.0 //TODO
+  def getCumulativeScore: BigDecimal= {
+    new BigDecimal(0.0) //TODO
   }
   
   override def toString: String = "%s: %s (%s)".format(schoolId.district.year.slug, student, glmlId)		  

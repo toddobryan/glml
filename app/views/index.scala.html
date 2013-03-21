@@ -1,4 +1,4 @@
-@(message: String)
+@(message: String)(implicit req: models.auth.VisitRequest[_])
 
 @main("GLML Scores") {
   <div class="row">

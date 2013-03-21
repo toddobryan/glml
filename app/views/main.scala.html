@@ -1,4 +1,4 @@
-@(title: String, scripts: Html = Html(""))(content: Html)
+@(title: String, scripts: Html = Html(""))(content: Html)(implicit req: models.auth.VisitRequest[_])
 
 <!DOCTYPE html>
 

@@ -5,6 +5,7 @@ import org.datanucleus.api.jdo.query._
 import javax.jdo.JDOHelper
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
+import java.math.BigDecimal
 
 case class SchoolInfo(name: String, score: Double, coaches: String)
 
@@ -33,12 +34,45 @@ class District {
   def year: Year = _year
   def year_=(theYear: Year) { _year = theYear }
   
-  def getTopSchools(testDate: Option[TestDate]): List[SchoolId] = {
+  def getTopSchools(testDate: Option[TestDate]): List[(String, BigDecimal, Set[User])] = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QSchoolId.candidate
-    val schoolIds = pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
-    schoolIds
+    if (!testDate.isEmpty) {
+      //LIST FOLD OR SUM
+      //list of SchoolIds in this district
+      //TODO test scores for all students at this school on this test date, add scores
+      val cand2 = QTest.candidate
+      
+      pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map(
+          (s: SchoolId) => (s.school.name, pm.query[Test].filter(
+          cand2.testDate.eq(testDate.get)).executeList().filter(
+          (t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](new BigDecimal(0.0))(
+          (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum)), s.coaches)).sortBy(_._2)
+                            
+      // pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map((s: SchoolId) => (s.school.name, s.getCumulativeScore, s.coaches)).sortBy(_._2)
+    } else {
+      pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map((s: SchoolId) => (s.school.name, s.getCumulativeScore, s.coaches)).sortBy(_._2)
+    }
   }
+  
+  /*
+    def get_top_schools(self, test_date=None):
+        mapping = {}
+        for school_id in SchoolID.objects.filter(district=self):
+            if test_date:
+                total = 0.0
+                for test in Test.objects.filter(student_id__school_id=school_id,
+                                                test_date=test_date):
+                    total += float(test.score)
+                mapping[school_id] = total
+            else:
+                mapping[school_id] = school_id.get_cumulative_score()
+        sorted_list = sorted(mapping.items(), key=lambda x: x[1], reverse=True)
+        return [{'name': school_id.school.name,
+                 'score': score,
+                 'coaches': school_id.coaches_names()} for (school_id,
+                                                            score) in sorted_list]
+   */
   
   def getTopStudents(testDate: Option[TestDate]): List[Nothing] = {
     Nil //TODO
