@@ -1,4 +1,4 @@
-@(message: String)(implicit req: models.auth.VisitRequest[_])
+@(message: String)
 
 @main("GLML Scores") {
   <div class="row">
@@ -33,13 +33,13 @@
         <section id="1">
           <h3>District 1</h3>
           
-	  	  <table class="table table-striped table-condensed">
+	  	  <table class="table table-striped table-condensed span9">
 		    <caption>Top Schools</caption>
           	<thead><th>School</th><th>Coach</th><th>Score</th></thead>
 		    <tr><td>duPont Manual</td><td>Becky Wahl</td><td>2467.50</td></tr>
 		  </table>
 
-		  <table class="table table-striped table-condensed">
+		  <table class="table table-striped table-condensed span9">
 		    <caption>Top 9th Grade Students</caption>
 		    <thead><th>Place</th><th>Student</th><th>School</th><th>Score</th></thead>
 			<tr><td>1</td><td>Zhang, Yue</td><td>duPont Manual</td><td>237.00</td></tr>
