@@ -48,6 +48,7 @@ trait QTestDate extends PersistableExpression[TestDate] {
   def id: NumericExpression[Long] = _id
   
   private[this] lazy val _date: DateExpression[java.util.Date] = new DateExpressionImpl[java.util.Date](this, "_date")
+  def date: DateExpression[java.util.Date] = _date
   
   private[this] lazy val _year: ObjectExpression[Year] = new ObjectExpressionImpl[Year](this, "_year")
   def year: ObjectExpression[Year] = _year

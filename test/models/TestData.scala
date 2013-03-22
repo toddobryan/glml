@@ -43,36 +43,36 @@ object TestData {
     // Coaches
     if(debug) println("Creating coaches...")
     val coach1 = new User("coach1", Some("Becky"), Some("Wahl"), Some("Email"), Some("pw"))
-    val coach2 = new User("coach2", Some("Mary"), Some("Eschels"), Some("Email"), Some("pw"))
-    val coach3 = new User("coach3", Some("Emily"), Some("David"), None, None)
-    val coach4 = new User("coach4", Some("Lesli"), Some("Poynter"), Some("Email"), None)
-    val coach5 = new User("coach5", Some("Ron"), Some("Newton"), None, Some("pw"))
+    val coach2 = new User("coach2", Some("Ron"), Some("Newton"), None, Some("pw"))
+    val coach3 = new User("coach3", Some("Mary"), Some("Eschels"), Some("Email"), Some("pw"))
+    val coach4 = new User("coach4", Some("Emily"), Some("David"), None, None)
+    val coach5 = new User("coach5", Some("Lesli"), Some("Poynter"), Some("Email"), None)
     val coach6 = new User("coach6", Some("Liz"), Some("Minton"), None, None)
 
     // School IDs
     if(debug) println("Creating schools IDs...")
     val schId1 = new SchoolId("01", school1, district1, Set(coach1))
-    val schId2 = new SchoolId("02", school2, district1, Set(coach5))
-    val schId3 = new SchoolId("03", school3, district1, Set(coach2, coach3, coach4))
+    val schId2 = new SchoolId("02", school2, district1, Set(coach2))
+    val schId3 = new SchoolId("03", school3, district1, Set(coach3, coach4, coach5))
     val schId4 = new SchoolId("04", school4, district2, Set(coach6))
 
     // Students
     if(debug) println("Creating students...")
     val student1 = new Student("Liu", "Andrew", None, None)
-    val student2 = new Student("Thieneman", "Tanner", None, None)
+    val student2 = new Student("Zhang", "Yue", None, None)
     val student3 = new Student("Lian", "Serena", None, None)
     val student4 = new Student("Kook", "Tae Lim", None, None)
-    val student5 = new Student("Zhang", "Yue", None, None)
+    val student5 = new Student("Thieneman", "Tanner", None, None)
     val student6 = new Student("Du", "Jian", None, None)
     val student7 = new Student("Finklestein", "Teddy", None, None)
     
     // Student IDs
     if(debug) println("Creating student IDs...")
     val stuId1 = new StudentId("000001", student1, schId1, 12)
-    val stuId2 = new StudentId("000002", student2, schId2, 12)
+    val stuId2 = new StudentId("000002", student2, schId1, 9)
     val stuId3 = new StudentId("000003", student3, schId1, 12)
     val stuId4 = new StudentId("000004", student4, schId1, 10)
-    val stuId5 = new StudentId("000005", student5, schId1, 9)
+    val stuId5 = new StudentId("000005", student5, schId2, 12)
     val stuId6 = new StudentId("000006", student6, schId3, 12)
     val stuId7 = new StudentId("000007", student7, schId4, 12)
 
@@ -99,7 +99,7 @@ object TestData {
     val test14 = new Test(date2, stuId7, 10)
     
     // Making everything persistent
-    if(debug) println("Creating persistent objects...")
+    if(debug) println("Making objects persistent...")
     DataStore.withTransaction{ pm => 
       pm.makePersistent(year2011)
       pm.makePersistent(year2012)
