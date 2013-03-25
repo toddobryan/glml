@@ -3,6 +3,8 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
+import scalajdo.ScalaPersistenceManager
+import scalajdo.DataStore
 import java.math.BigDecimal
 
 @PersistenceCapable(detachable="true")
@@ -42,7 +44,10 @@ class StudentId {
   def grade_=(theGrade: Int) { _grade = theGrade }
   
   def getCumulativeScore: BigDecimal= {
-    new BigDecimal(0.0) //TODO
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QTest.candidate
+    pm.query[Test].filter(cand.studentId.eq(this)).executeList().foldRight[BigDecimal](new BigDecimal(0.0))(
+        (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum))
   }
   
   override def toString: String = "%s: %s (%s)".format(schoolId.district.year.slug, student, glmlId)		  

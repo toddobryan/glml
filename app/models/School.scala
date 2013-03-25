@@ -3,6 +3,8 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
+import scalajdo.ScalaPersistenceManager
+import scalajdo.DataStore
 
 @PersistenceCapable(detachable="true")
 class School {
@@ -24,8 +26,21 @@ class School {
   def name_=(theName: String) { _name = theName }
   
   def coaches: List[User] = {
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QSchoolId.candidate
+    // pm.query[SchoolId].filter()
+    
     Nil //TODO
   }
+  
+  /*
+   def coaches(self):
+        coaches = set()
+        for school_id in self.schoolid_set.all():
+            for coach in school_id.coaches.all():
+                coaches.add(coach)
+        return list(coaches)
+   */
   
   override def toString: String = name
 }

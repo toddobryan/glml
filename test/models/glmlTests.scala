@@ -32,4 +32,6 @@ class glmlTests extends FunSuite {
         ("Ballard", new BigDecimal(22.5), Set(coach1(4).username, coach1(3).username, coach1(2).username)))
     assert(d1.getTopSchools(Some(date1)).map(a => (a._1, a._2, a._3.map(_.username))) === t2)
   }
+  
+  //TODO: StudentId.getCumulativeScore()
 }

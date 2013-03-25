@@ -53,9 +53,6 @@ trait QTest extends PersistableExpression[Test] {
   private[this] lazy val _studentId: ObjectExpression[StudentId] = new ObjectExpressionImpl[StudentId](this, "_studentId")
   def studentId: ObjectExpression[StudentId] = _studentId
   
-  private[this] lazy val _studentSchoolId: ObjectExpression[SchoolId] = new ObjectExpressionImpl[SchoolId](this, "_studentSchoolId")
-  def studentSchoolId: ObjectExpression[SchoolId] = _studentSchoolId
-  
   private[this] lazy val _score: NumericExpression[java.math.BigDecimal] = new NumericExpressionImpl[java.math.BigDecimal](this, "_score")
   def score: NumericExpression[java.math.BigDecimal] = _score
 }

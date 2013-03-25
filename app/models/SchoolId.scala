@@ -48,9 +48,26 @@ class SchoolId {
   override def toString: String = "%s: %s".format(district.year.slug, school)
   
   def getCumulativeScore(): BigDecimal = {
-    new BigDecimal(0.0)
+    new BigDecimal(0.0) //TODO
   }
+  
+  /*
+  def coachesNames //TODO
+  def coachesStr //TODO
+  def coachWord //TODO
+  def getValidId //TODO
+  */
 
+}
+
+object SchoolId {
+  def getOrCreateAnswerSchoolId(year: Option[Year]): SchoolId = {
+    null //TODO
+  }
+  
+  def getCurrentSchoolId(year: Option[Year]): SchoolId = {
+    null //TODO
+  }
 }
 
 trait QSchoolId extends PersistableExpression[SchoolId] {
