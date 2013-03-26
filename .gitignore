@@ -12,3 +12,5 @@ tmp
 dist
 *.db
 .target
+*.pyc
+*~

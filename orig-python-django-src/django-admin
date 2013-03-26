@@ -22,20 +22,20 @@
 #
 # Note that you only need to do "resetall" if the
 # database has gotten screwed up, so that will save some time between runs.
-PYTHON_VERSION="2.6"
-db="glml_$USER"
+PYTHON_VERSION="2.7"
+db="glml"
 
 # Remove all bytecode to ensure the environment on all computers is REALLY the same.
 chmod +x remove-stale-bytecode
 ./remove-stale-bytecode
 
-if [ "$1" = "resetall" ]; then
-	dropdb "$db"
-	createdb "$db"
-	/usr/local/lib/python$PYTHON_VERSION/dist-packages/django/bin/django-admin.py syncdb --pythonpath=. --settings=glml.settings --noinput
-	# Make sure this is executable and save some headaches for people
-	chmod +x glml/manage.py
-	glml/manage.py loaddb --pythonpath=. --settings=glml.settings
-else
-	/usr/local/lib/python$PYTHON_VERSION/dist-packages/django/bin/django-admin.py "$@" --pythonpath=. --settings=glml.settings
-fi
+#if [ "$1" = "resetall" ]; then
+#	dropdb "$db"
+#	createdb "$db"
+#	/usr/local/lib/python$PYTHON_VERSION/dist-packages/django/bin/django-admin.py syncdb --pythonpath=. --settings=glml.settings --noinput
+#	# Make sure this is executable and save some headaches for people
+#	chmod +x glml/manage.py
+#	glml/manage.py loaddb --pythonpath=. --settings=glml.settings
+#else
+/usr/local/bin/django-admin.py --pythonpath=. --settings=glml.settings "$@0"
+#fi
