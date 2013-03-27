@@ -7,6 +7,8 @@ import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
 import java.math.BigDecimal
 
+import auth.User
+
 @PersistenceCapable(detachable="true")
 @Uniques(Array(
     new Unique(name="DISTRICT_WITH_SCHOOL", members=Array("_district", "_school")),

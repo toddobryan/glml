@@ -12,7 +12,6 @@ class Test {
   private[this] var _id: Long = _
   private[this] var _testDate: TestDate = _
   private[this] var _studentId: StudentId = _
-  private[this] var _studentSchoolId: SchoolId = _
   @Persistent
   @Column(length=4, scale=2)
   private[this] var _score: java.math.BigDecimal = _
@@ -22,7 +21,6 @@ class Test {
     testDate_=(testDate)
     studentId_=(studentId)
     score_=(score)
-    _studentSchoolId = studentId.schoolId
   }
   
   def id: Long = _id

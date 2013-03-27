@@ -4,6 +4,8 @@ import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
 
+import auth.User
+
 @PersistenceCapable(detachable="true")
 @Unique(name="NAME", members=Array("_lastName", "_firstName", "_middleName"))
 class Student extends Ordered[Student] {

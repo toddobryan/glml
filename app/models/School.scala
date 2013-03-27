@@ -6,6 +6,8 @@ import org.datanucleus.query.typesafe._
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 
+import auth.User
+
 @PersistenceCapable(detachable="true")
 class School {
   @PrimaryKey

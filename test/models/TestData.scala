@@ -12,6 +12,8 @@ import javax.jdo.annotations.Unique
 import scalajdo.DataStore
 import scalajdo.ScalaPersistenceManager
 
+import auth.User
+
 object TestData {
   def load(debug: Boolean = false) {
     val dbFile = new File("data.h2.db")
@@ -42,12 +44,12 @@ object TestData {
     
     // Coaches
     if(debug) println("Creating coaches...")
-    val coach1 = new User("coach1", Some("Becky"), Some("Wahl"), Some("Email"), Some("pw"))
-    val coach2 = new User("coach2", Some("Ron"), Some("Newton"), None, Some("pw"))
-    val coach3 = new User("coach3", Some("Mary"), Some("Eschels"), Some("Email"), Some("pw"))
-    val coach4 = new User("coach4", Some("Emily"), Some("David"), None, None)
-    val coach5 = new User("coach5", Some("Lesli"), Some("Poynter"), Some("Email"), None)
-    val coach6 = new User("coach6", Some("Liz"), Some("Minton"), None, None)
+    val coach1 = new User("coach1", "Becky", "Wahl", email="becky@abc.com", password="pw")
+    val coach2 = new User("coach2", "Ron", "Newton", password="pw")
+    val coach3 = new User("coach3", "Mary", "Eschels", email="mary@abc.com", password="pw")
+    val coach4 = new User("coach4", "Emily", "David")
+    val coach5 = new User("coach5", "Lesli", "Poynter", email="lesli@abc.com")
+    val coach6 = new User("coach6", "Liz", "Minton")
 
     // School IDs
     if(debug) println("Creating schools IDs...")

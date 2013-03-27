@@ -9,6 +9,8 @@ import scalajdo.ScalaPersistenceManager
 import java.math.BigDecimal
 import org.joda.time.{DateTime, LocalDate}
 
+import auth.{User, QUser}
+
 class glmlTests extends FunSuite {
   val pm = DataStore.pm
   

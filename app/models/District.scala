@@ -7,6 +7,8 @@ import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 import java.math.BigDecimal
 
+import models.auth.User
+
 case class SchoolInfo(name: String, score: Double, coaches: String)
 
 @PersistenceCapable(detachable="true")
@@ -16,8 +18,7 @@ class District {
   @Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
   private[this] var _id: Long = _
   @Column(allowsNull="false", length=1)
-  private[this] var _glmlId: String = _
-  
+  private[this] var _glmlId: String = _  
   private[this] var _year: Year = _
   
   def this(glmlId: String, year: Year) = {
