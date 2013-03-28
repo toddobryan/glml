@@ -32,10 +32,6 @@ def asBoolean(b):
     else:
         return 'false'
     
-def years():
-    objs = ["      new Year(%d)" % y.start for y in Year.objects.all()]
-    return defn("Year", ",\n".join(objs))
-
 def yearMap():
     # returns Scala code to create a map of years from start to the object
     return '    val yearMap: Map[Int, Year] = DataStore.pm.query[Year].executeList().map((y: Year) => y.start -> y).toMap\n'
@@ -60,11 +56,19 @@ def studentIdMap():
     # creates a map from (year.start, glmlId) to StudentId
     return '    val studentIdMap: Map[(Int, String), StudentId] = DataStore.pm.query[StudentId].executeList().map((s: StudentId) => ((s.schoolId.district.year.start, s.glmlId) -> s).toMap\n'
     
+def testDateMap():
+    # creates a map from date to TestDate
+    return '    val testDateMap: Map[String, TestDate] = DataStore.pm.query[TestDate].executeList().map((td: TestDate) => td.date.toString -> td).toMap\n'
+    
 def usernamesToSetUser():
     return '''    def usernamesToSetUser(names: List[String]): Set[User] = {
       val cand = QUser.candidate
       names.map((n: String) => DataStore.pm.query[User].filter(cand.username.eq(n)).executeOption().get).toSet
     }\n'''
+
+def years():
+    objs = ["      new Year(%d)" % y.start for y in Year.objects.all()]
+    return defn("Year", ",\n".join(objs))
 
 def districts():
     objs = ['      new District("%s", yearMap(%d))' % (d.glml_id, d.year.start) for d in District.objects.all()]
@@ -106,10 +110,44 @@ def studentIds():
             s in StudentID.objects.all()]
     return defn('StudentId', ',\n'.join(objs), studentMap() + schoolIdMap())
     
-#def tests():
-#    objs = ['     new Test(%s, studentIdMap(%d, "%s"), %d)' %
-            
+def tests():
+    objs = ['     new Test(testDateMap("%s"), studentIdMap((%d, "%s")), %.2f)' % 
+            (t.test_date.date, t.student_id.school_id.district.year.start, t.student_id.glml_id, t.score) for
+            t in Test.objects.all()]
+    return defn('Test', ',\n'.join(objs), testDateMap() + studentIdMap())
     
-imports = '''
-import org.joda.time.{LocalDate, DateTime}
+header = '''import org.joda.time.{LocalDate, DateTime}
+import scalajdo.DataStore
+
+import models.auth.User
+import models._
+
+object LoadRealData {
+  def load(debug: Boolean = true) {
+    loadYears(debug)
+    loadDistricts(debug)
+    loadSchools(debug)
+    loadStudents(debug)
+    loadTestDates(debug)
+    loadCoaches(debug)
+    loadSchoolIds(debug)
+    loadStudentIds(debug)
+    loadTests(debug)
+  }
+    
 '''
+
+def writeFile():
+    out = open('../test/LoadRealData.scala', 'w')
+    out.write(header)
+    out.write(years() + '\n')
+    out.write(districts() + '\n')
+    out.write(schools() + '\n')
+    out.write(students() + '\n')
+    out.write(testDates() + '\n')
+    out.write(coaches() + '\n')
+    out.write(schoolIds() + '\n')
+    out.write(studentIds() + '\n')
+    out.write(tests() + '\n')
+    out.write('}')
+    out.close()
