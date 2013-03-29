@@ -43,7 +43,7 @@ class StudentId {
   def grade: Int = _grade
   def grade_=(theGrade: Int) { _grade = theGrade }
   
-  def getCumulativeScore: BigDecimal= {
+  def getCumulativeScore: BigDecimal = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QTest.candidate
     pm.query[Test].filter(cand.studentId.eq(this)).executeList().foldRight[BigDecimal](new BigDecimal(0.0))(
@@ -70,7 +70,7 @@ trait QStudentId extends PersistableExpression[StudentId] {
   def student: ObjectExpression[Student] = _student
   
   private[this] lazy val _schoolId: ObjectExpression[SchoolId] = new ObjectExpressionImpl[SchoolId](this, "_school")
-  def school: ObjectExpression[SchoolId] = _schoolId
+  def schoolId: ObjectExpression[SchoolId] = _schoolId
   
   private[this] lazy val _grade: NumericExpression[Int] = new NumericExpressionImpl[Int](this, "_grade")
   def grade: NumericExpression[Int] = _grade

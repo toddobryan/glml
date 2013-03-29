@@ -63,7 +63,31 @@ class District {
   
   def getTopStudents(testDate: Option[TestDate]): List[(Int, List[(Int, StudentId, BigDecimal)])] = {
     def makePlaceList(list: List[(StudentId, BigDecimal)]): List[(Int, StudentId, BigDecimal)] = {
-      Nil //TODO
+      list match {
+        case Nil => Nil
+        case x :: xs => {
+          val listSorted = list.sortBy(_._2).reverse
+          val first = (1, listSorted.head._1, listSorted.head._2)
+          def placeListHelp(list: List[(StudentId, BigDecimal)], buildList: List[(Int, StudentId, BigDecimal)], last: (Int, StudentId, BigDecimal), place: Int): List[(Int, StudentId, BigDecimal)] = {
+            list match {
+              case Nil => buildList
+              case x :: xs => {
+                if(x._2 == last._3) {
+                  val next = (last._1, x._1, x._2)
+                  placeListHelp(list.tail, next :: buildList, next, place + 1)
+                } else {
+                  if(place >= 11) buildList
+                  else {
+                    val next = (place, x._1, x._2)
+                    placeListHelp(list.tail, next :: buildList, next, place + 1)
+                  }
+                }
+              }
+            }
+          }
+          placeListHelp(listSorted.tail, List(first), first, 2).sortWith(_._1 < _._1)
+        }
+      }
     }
     
     val pm: ScalaPersistenceManager = DataStore.pm
@@ -75,7 +99,7 @@ class District {
       grades.map((grade: Int) => 
           (grade, 
            makePlaceList(testListDateAndDistrict.filter((t: Test) => t.studentId.grade == grade).map(
-             (t: Test) => (t.studentId, t.score)).sortBy(_._2).reverse)
+             (t: Test) => (t.studentId, new BigDecimal(t.score))).sortBy(_._2).reverse)
           )
       )
     } else {

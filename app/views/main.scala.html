@@ -39,8 +39,11 @@
                   <a href="/archive">Archive</a>
                 </li>
                 <li class="">
+                  <a href="/hallOfFame">Hall of Fame</a>
+                </li>
+                <li class="">
                   <a href="/login">Log In</a>
-                  </li>
+                </li>
               </ul>
             </div>
           </div>
@@ -55,9 +58,9 @@
 		  </div>
 	    </div>
       </header>
-    
-      <div class="container">
-    <!-- Flash Scope -->  
+      
+    <!-- Flash Scope -->
+      <div class="container">  
         <div class="content">
 		  @if(req.flash.get("message").isDefined) {
 		    <div class="alert alert-success">@req.flash("message")</div>
@@ -65,7 +68,7 @@
 		  @if(req.flash.get("error").isDefined) {
 		    <div class="alert alert-error">@req.flash("error")</div>
 		  }
-	      </div>
+	    </div>
 	      
 	    @content
 	  
