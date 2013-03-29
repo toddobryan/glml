@@ -40,11 +40,15 @@ class District {
     val cand = QSchoolId.candidate
     if (!testDate.isEmpty) {
       val cand2 = QTest.candidate
-      pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map(
-          (s: SchoolId) => (s.school.name, pm.query[Test].filter(
-          cand2.testDate.eq(testDate.get)).executeList().filter(
-          (t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](new BigDecimal(0.0))(
-          (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum)), s.coaches)).sortBy(_._2).reverse
+      val testListDate = pm.query[Test].filter(cand2.testDate.eq(testDate.get)).executeList()
+      val schoolIdList = pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
+      schoolIdList.map((s: SchoolId) => 
+          (s.school.name, 
+           testListDate.filter((t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](new BigDecimal(0.0))(
+             (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum)), 
+           s.coaches
+          )
+      ).sortBy(_._2).reverse
     } else {
       pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map((s: SchoolId) => (s.school.name, s.getCumulativeScore, s.coaches)).sortBy(_._2).reverse
     }
@@ -57,8 +61,35 @@ class District {
      */
   }
   
-  def getTopStudents(testDate: Option[TestDate]): List[Nothing] = {
-    Nil //TODO
+  def getTopStudents(testDate: Option[TestDate]): List[(Int, List[(Int, StudentId, BigDecimal)])] = {
+    def makePlaceList(list: List[(StudentId, BigDecimal)]): List[(Int, StudentId, BigDecimal)] = {
+      Nil //TODO
+    }
+    
+    val pm: ScalaPersistenceManager = DataStore.pm
+    if (!testDate.isEmpty) {
+      val cand = QTest.candidate
+      val testListDateAndDistrict = pm.query[Test].filter(cand.testDate.eq(testDate.get)).executeList().filter(
+          (t: Test) => t.studentId.schoolId.district.eq(this))
+      val grades = List(9, 10, 11, 12)
+      grades.map((grade: Int) => 
+          (grade, 
+           makePlaceList(testListDateAndDistrict.filter((t: Test) => t.studentId.grade == grade).map(
+             (t: Test) => (t.studentId, t.score)).sortBy(_._2).reverse)
+          )
+      )
+    } else {
+      val cand = QStudentId.candidate
+      val varble = QSchoolId.variable("district")
+      val testListDistrict = pm.query[StudentId].filter(cand.schoolId.eq(varble).and(varble.district.eq(this))).executeList()
+      val grades = List(9, 10, 11, 12)
+      grades.map((grade: Int) => 
+          (grade, 
+           makePlaceList(testListDistrict.filter((s: StudentId) => s.grade == grade).map(
+             (s: StudentId) => (s, s.getCumulativeScore)).sortBy(_._2).reverse)
+          )
+      )
+    }
   }
   
   /*
