@@ -69,7 +69,7 @@ trait QStudentId extends PersistableExpression[StudentId] {
   private[this] lazy val _student: ObjectExpression[Student] = new ObjectExpressionImpl[Student](this, "_student")
   def student: ObjectExpression[Student] = _student
   
-  private[this] lazy val _schoolId: ObjectExpression[SchoolId] = new ObjectExpressionImpl[SchoolId](this, "_school")
+  private[this] lazy val _schoolId: ObjectExpression[SchoolId] = new ObjectExpressionImpl[SchoolId](this, "_schoolId")
   def schoolId: ObjectExpression[SchoolId] = _schoolId
   
   private[this] lazy val _grade: NumericExpression[Int] = new NumericExpressionImpl[Int](this, "_grade")

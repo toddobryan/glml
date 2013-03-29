@@ -23,7 +23,7 @@ class glmlTests extends FunSuite {
     val t1 = List(("duPont Manual", new BigDecimal(450), Set(coach1(0).username)), 
         ("St. Xavier", new BigDecimal(60), Set(coach1(1).username)),
         ("Ballard", new BigDecimal(42.5), Set(coach1(2).username, coach1(3).username, coach1(4).username)))
-    assert(d1.getTopSchools(None).map(a => (a._1, a._2, a._3.map(_.username))) === t1)
+    assert(d1.getTopSchools(None) === t1)
   }
   
   test("District.getTopSchools single date") {
@@ -32,7 +32,7 @@ class glmlTests extends FunSuite {
     val t2 = List(("duPont Manual", new BigDecimal(225), Set(coach1(0).username)), 
         ("St. Xavier", new BigDecimal(30), Set(coach1(1).username)),
         ("Ballard", new BigDecimal(22.5), Set(coach1(4).username, coach1(3).username, coach1(2).username)))
-    assert(d1.getTopSchools(Some(date1)).map(a => (a._1, a._2, a._3.map(_.username))) === t2)
+    assert(d1.getTopSchools(Some(date1)) === t2)
   }
   
   //TODO: StudentId.getCumulativeScore()

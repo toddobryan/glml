@@ -35,7 +35,7 @@ class District {
   def year: Year = _year
   def year_=(theYear: Year) { _year = theYear }
   
-  def getTopSchools(testDate: Option[TestDate]): List[(String, BigDecimal, Set[User])] = {
+  def getTopSchools(testDate: Option[TestDate]): List[(String, BigDecimal, Set[String])] = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QSchoolId.candidate
     if (!testDate.isEmpty) {
@@ -46,19 +46,12 @@ class District {
           (s.school.name, 
            testListDate.filter((t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](new BigDecimal(0.0))(
              (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum)), 
-           s.coaches
+           s.coachesNames
           )
       ).sortBy(_._2).reverse
     } else {
-      pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map((s: SchoolId) => (s.school.name, s.getCumulativeScore, s.coaches)).sortBy(_._2).reverse
+      pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map((s: SchoolId) => (s.school.name, s.getCumulativeScore, s.coachesNames)).sortBy(_._2).reverse
     }
-    
-    /* TODO: return coaches' names, not coaches
-     return [{'name': school_id.school.name,
-                 'score': score,
-                 'coaches': school_id.coaches_names()} for (school_id,
-                                                            score) in sorted_list]
-     */
   }
   
   def getTopStudents(testDate: Option[TestDate]): List[(Int, List[(Int, StudentId, BigDecimal)])] = {
@@ -115,61 +108,6 @@ class District {
       )
     }
   }
-  
-  /*
-   def get_top_students(self, test_date=None):
-        from glml.utils import Place, StudentWithScore
-        final_list = []
-        for grade in GRADES:
-            if test_date:
-                students = [StudentWithScore(test.student_id, float(test.score)) for test in Test.objects.filter(student_id__school_id__district=self,
-                                                                                                                 test_date=test_date,
-                                                                                                                 student_id__grade=grade)]
-            else:
-                students = [StudentWithScore(students_id,
-                                             students_id.get_cumulative_score()) for students_id in StudentID.objects.filter(school_id__district=self,
-                                                                                                                             grade=grade)]
-            students.sort()
-            final_list.append({'grade': grade, 'place_list': Place.make_place_list(students)})
-        return final_list
-   */
-  
-  /*
-   class StudentWithScore(object):
-    def __init__(self, student_id, score):
-        self.student_id = student_id
-        self.score = score
-        
-    def __cmp__(self, other):
-        if self.score == other.score:
-            return cmp(self.student_id.student, other.student_id.student)
-        else:
-            return cmp(other.score, self.score)
-        
-class Place(object):
-    def __init__(self, place, students):
-        self.place = place
-        self.students = students
-
-    def length(self):
-        return len(self.students)
-
-    @staticmethod
-    def make_place_list(students):
-        place_list = []
-        start_index = 0
-        end_index = 1
-        place = 1
-        while place <= 10 and end_index < len(students) and students[start_index].score > 0.0:
-            while end_index < len(students) and students[start_index].score == students[end_index].score:
-                end_index += 1
-            place_students = students[start_index:end_index]
-            place_list.append(Place(place, place_students))
-            place += len(place_students)
-            start_index = end_index
-            end_index = start_index + 1
-        return place_list
-   */
   
   override def toString: String = "%s: %s".format(year.slug, glmlId)
 }

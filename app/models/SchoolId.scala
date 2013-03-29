@@ -53,8 +53,11 @@ class SchoolId {
     new BigDecimal(0.0) //TODO
   }
   
+  def coachesNames: Set[String] = {
+    coaches.map((u: User) => u.fullName())
+  }
+  
   /*
-  def coachesNames //TODO
   def coachesStr //TODO
   def coachWord //TODO
   def getValidId //TODO
