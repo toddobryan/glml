@@ -5,7 +5,6 @@ import org.datanucleus.api.jdo.query._
 import javax.jdo.JDOHelper
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
-import java.math.BigDecimal
 
 import models.auth.User
 
@@ -18,7 +17,7 @@ class District {
   @Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
   private[this] var _id: Long = _
   @Column(allowsNull="false", length=1)
-  private[this] var _glmlId: String = _  
+  private[this] var _glmlId: String = _ 
   private[this] var _year: Year = _
   
   def this(glmlId: String, year: Year) = {
@@ -43,8 +42,8 @@ class District {
       pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map(
           (s: SchoolId) => (s.school.name, pm.query[Test].filter(
           cand2.testDate.eq(testDate.get)).executeList().filter(
-          (t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](new BigDecimal(0.0))(
-          (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum)), s.coaches)).sortBy(_._2).reverse
+          (t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](BigDecimal(0.0))(
+          (t: Test, sum: BigDecimal) => t.score + sum), s.coaches)).sortBy(_._2).reverse
     } else {
       pm.query[SchoolId].filter(cand.district.eq(this)).executeList().map((s: SchoolId) => (s.school.name, s.getCumulativeScore, s.coaches)).sortBy(_._2).reverse
     }
@@ -116,7 +115,7 @@ class Place(object):
         return place_list
    */
   
-  override def toString: String = "%s: %s".format(year.slug, glmlId)
+  override def toString: String = "District(id=%d)".format(id)
 }
 
 object District {

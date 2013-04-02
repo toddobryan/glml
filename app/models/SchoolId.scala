@@ -5,7 +5,6 @@ import scala.collection.JavaConverters._
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
-import java.math.BigDecimal
 
 import auth.User
 
@@ -47,10 +46,10 @@ class SchoolId {
   def coaches: Set[User] = _coaches.asScala.toSet
   def coaches_=(theCoaches: Set[User]) { _coaches = theCoaches.asJava }
   
-  override def toString: String = "%s: %s".format(district.year.slug, school)
+  override def toString: String = "SchoolId(%d)".format(id)
   
   def getCumulativeScore(): BigDecimal = {
-    new BigDecimal(0.0) //TODO
+    BigDecimal(0.0) //TODO
   }
   
   /*

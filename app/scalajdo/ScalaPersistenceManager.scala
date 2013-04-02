@@ -1,7 +1,7 @@
 package scalajdo
 
 import scala.collection.JavaConverters._
-import javax.jdo.{Extent, Query}
+import javax.jdo.{Extent, FetchPlan, Query}
 import org.datanucleus.api.jdo.JDOPersistenceManager
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory
 import scala.reflect.ClassTag
@@ -69,6 +69,8 @@ class ScalaPersistenceManager(val jpm: JDOPersistenceManager) {
   def query[T: ClassTag](): ScalaQuery[T] = ScalaQuery[T](jpm)
   
   def detachCopy[T: ClassTag](obj: T): T = jpm.detachCopy(obj)
+  
+  def fetchPlan: FetchPlan = jpm.getFetchPlan()
 }
 
 object ScalaPersistenceManager {
