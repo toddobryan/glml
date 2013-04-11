@@ -56,31 +56,11 @@ class District {
   
   def getTopStudents(testDate: Option[TestDate]): List[(Int, List[(Int, StudentId, BigDecimal)])] = {
     def makePlaceList(list: List[(StudentId, BigDecimal)]): List[(Int, StudentId, BigDecimal)] = {
-      list match {
-        case Nil => Nil
-        case x :: xs => {
-          val listSorted = list.sortBy(_._2).reverse
-          val first = (1, listSorted.head._1, listSorted.head._2)
-          def placeListHelp(list: List[(StudentId, BigDecimal)], buildList: List[(Int, StudentId, BigDecimal)], last: (Int, StudentId, BigDecimal), place: Int): List[(Int, StudentId, BigDecimal)] = {
-            list match {
-              case Nil => buildList
-              case x :: xs => {
-                if(x._2 == last._3) {
-                  val next = (last._1, x._1, x._2)
-                  placeListHelp(list.tail, next :: buildList, next, place + 1)
-                } else {
-                  if(place >= 11) buildList
-                  else {
-                    val next = (place, x._1, x._2)
-                    placeListHelp(list.tail, next :: buildList, next, place + 1)
-                  }
-                }
-              }
-            }
-          }
-          placeListHelp(listSorted.tail, List(first), first, 2).sortWith(_._1 < _._1)
-        }
-      }
+      val nondistinct = list.unzip._2.sorted.reverse
+      val distinct = list.unzip._2.distinct.sorted.reverse.take(10)
+      val scoresAndNames = for(score <- distinct) yield (score, list.filter(_._2 == score).map(_._1))
+      val places = scoresAndNames.flatMap((t: (BigDecimal, List[StudentId])) => t._2.map((nondistinct.indexOf(t._1) + 1, _, t._1)))
+      places.takeWhile(_._1 <= 10)
     }
     
     val pm: ScalaPersistenceManager = DataStore.pm
