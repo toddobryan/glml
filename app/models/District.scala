@@ -71,7 +71,7 @@ class District {
       grades.map((grade: Int) => 
           (grade, 
            makePlaceList(testListDateAndDistrict.filter((t: Test) => t.studentId.grade == grade).map(
-             (t: Test) => (t.studentId, new BigDecimal(t.score))).sortBy(_._2).reverse)
+             (t: Test) => (t.studentId, t.score)))
           )
       )
     } else {
