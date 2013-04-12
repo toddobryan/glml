@@ -69,9 +69,8 @@ class District {
           (t: Test) => t.studentId.schoolId.district.eq(this))
       val grades = List(9, 10, 11, 12)
       grades.map((grade: Int) => 
-          (grade, 
-           makePlaceList(testListDateAndDistrict.filter((t: Test) => t.studentId.grade == grade).map(
-             (t: Test) => (t.studentId, t.score)))
+          (grade,
+           makePlaceList(testListDateAndDistrict.filter((t: Test) => t.studentId.grade == grade).map((t: Test) => (t.studentId, t.score)))
           )
       )
     } else {
@@ -80,9 +79,8 @@ class District {
       val testListDistrict = pm.query[StudentId].filter(cand.schoolId.eq(varble).and(varble.district.eq(this))).executeList()
       val grades = List(9, 10, 11, 12)
       grades.map((grade: Int) => 
-          (grade, 
-           makePlaceList(testListDistrict.filter((s: StudentId) => s.grade == grade).map(
-             (s: StudentId) => (s, s.getCumulativeScore)).sortBy(_._2).reverse)
+          (grade,
+           makePlaceList(testListDistrict.filter((s: StudentId) => s.grade == grade).map((s: StudentId) => (s, s.getCumulativeScore)))
           )
       )
     }
