@@ -16,7 +16,7 @@ class Test {
   @Column(length=4, scale=2)
   private[this] var _score: java.math.BigDecimal = _
   
-  def this(testDate: TestDate, studentId: StudentId, score: Double) = {
+  def this(testDate: TestDate, studentId: StudentId, score: BigDecimal) = {
     this()
     testDate_=(testDate)
     studentId_=(studentId)
@@ -31,8 +31,9 @@ class Test {
   def studentId: StudentId = _studentId
   def studentId_=(theStudentId: StudentId) { _studentId = theStudentId }
   
-  def score: Double = _score.doubleValue
-  def score_=(theScore: Double) { _score = new java.math.BigDecimal(theScore) }
+  def score: BigDecimal = BigDecimal(_score)
+  def score_=(theScore: BigDecimal) { _score = theScore.bigDecimal }
+  def score_=(theScore: Double) { score_=(BigDecimal(theScore)) }
   
   def compareMapping {} //TODO
   

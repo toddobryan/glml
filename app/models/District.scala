@@ -5,7 +5,6 @@ import org.datanucleus.api.jdo.query._
 import javax.jdo.JDOHelper
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
-import java.math.BigDecimal
 
 import models.auth.User
 
@@ -18,7 +17,7 @@ class District {
   @Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
   private[this] var _id: Long = _
   @Column(allowsNull="false", length=1)
-  private[this] var _glmlId: String = _  
+  private[this] var _glmlId: String = _ 
   private[this] var _year: Year = _
   
   def this(glmlId: String, year: Year) = {
@@ -44,8 +43,8 @@ class District {
       val schoolIdList = pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
       schoolIdList.map((s: SchoolId) => 
           (s.school.name, 
-           testListDate.filter((t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](new BigDecimal(0.0))(
-             (t: Test, sum: BigDecimal) => new BigDecimal(t.score).add(sum)), 
+           testListDate.filter((t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](BigDecimal(0.0))(
+             (t: Test, sum: BigDecimal) => t.score + sum), 
            s.coachesNames
           )
       ).sortBy(_._2).reverse
@@ -89,7 +88,7 @@ class District {
     }
   }
   
-  override def toString: String = "%s: %s".format(year.slug, glmlId)
+  override def toString: String = "District(id=%d)".format(id)
 }
 
 object District {
