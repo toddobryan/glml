@@ -8,7 +8,7 @@ import org.datanucleus.query.typesafe._
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 
-import auth.User
+import auth.{User, QUser}
 
 @PersistenceCapable(detachable="true")
 @Uniques(Array(
@@ -56,15 +56,58 @@ class SchoolId {
     pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().foldRight[BigDecimal](BigDecimal(0.0))((s: StudentId, sum: BigDecimal) => t.score + sum)
   }
   
-  def coachesNames: Set[String] = {
-    coaches.map((u: User) => u.fullName())
+  // not sure if I need parens here
+  def coachesNames(): Set[String] = {
+    coaches.map(_.fullName())
+  }
+  
+  // not sure if I need parens here
+  // RENAME THIS DARNED METHOD NAME. ARGH!
+  def coachesStr(): List[String] = {
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QUser.candidate
+    pm.query[User].executeList() map { (coach: User) =>
+      if (!coach.email.isEmpty) "%s %s - <a href="mailto:%s">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
+      else "%s %s".format(coach.first, coach.last)
+    }
   }
   
   /*
-  def coachesStr //TODO
+   def coaches_str(self):
+        ret = []
+        for coach in self.coaches.all():
+            email = coach.email
+            if email:
+                ret.append('%s %s - <a href="mailto:%s">%s</a>' % (coach.first_name,
+                                                                   coach.last_name,
+                                                                   email, email))
+            else:
+                ret.append('%s %s' % (coach.first_name, coach.last_name))
+        return ret
+  */
+  
+  /*
   def coachWord //TODO
   def getValidId //TODO
   */
+  
+  /*
+    def coach_word(self):
+        coach = u'Coach'
+        if self.coaches.count() < 2:
+            return coach 
+        return u'%ses' % coach
+
+    def get_valid_id(self, grade):
+        student_ids = StudentID.objects.filter(school_id=self, grade=grade)
+        used_ids = [int(student_id.glml_id[4:]) for student_id in student_ids]
+        all_ids = range(1, 100)
+        [all_ids.remove(id) for id in used_ids if id in all_ids]
+        id = unicode(min(all_ids))
+        if len(id) == 1:
+            return u'0%s' % id
+        return id
+   */
 
 }
 
