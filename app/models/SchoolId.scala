@@ -5,6 +5,8 @@ import scala.collection.JavaConverters._
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
+import scalajdo.ScalaPersistenceManager
+import scalajdo.DataStore
 
 import auth.User
 
@@ -49,7 +51,9 @@ class SchoolId {
   override def toString: String = "SchoolId(%d)".format(id)
   
   def getCumulativeScore(): BigDecimal = {
-    BigDecimal(0.0) //TODO
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QStudentId.candidate
+    pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().foldRight[BigDecimal](BigDecimal(0.0))((s: StudentId, sum: BigDecimal) => t.score + sum)
   }
   
   def coachesNames: Set[String] = {
