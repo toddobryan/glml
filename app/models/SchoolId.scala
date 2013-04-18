@@ -57,15 +57,13 @@ class SchoolId {
   }
   
   def coachesNames: Set[String] = {
-    coaches map ( _.fullName() )
+    coaches map { _.fullName() }
   }
   
   // when implementing in views, disable automatic HTML escaping using @Html(coachesStr())
   // renamed from coachesStr
-  def coachesEmails(): List[String] = {
-    val pm: ScalaPersistenceManager = DataStore.pm
-    val cand = QUser.candidate
-    pm.query[User].executeList() map { (coach: User) =>
+  def coachesEmails(): Set[String] = {
+    coaches map { (coach: User) =>
       if (!coach.email.isEmpty) "%s %s - <a href=\"mailto:%s\">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
       else "%s %s".format(coach.first, coach.last)
     }
