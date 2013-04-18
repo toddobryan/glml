@@ -75,7 +75,7 @@ class SchoolId {
     else "Coaches"
   }
   
-  def getValidId(grade: Int): String = { 
+  def getValidId(grade: Int): String = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QStudentId.candidate
     val studentIds = pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().filter(stuId => stuId.grade == grade)
