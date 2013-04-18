@@ -62,7 +62,7 @@ class SchoolId {
   
   // when implementing in views, disable automatic HTML escaping using @Html(coachesStr())
   // renamed from coachesStr
-  def coachesEmails(): Set[String] = {
+  def coachesEmails: Set[String] = {
     coaches map { (coach: User) =>
       if (!coach.email.isEmpty) "%s %s - <a href=\"mailto:%s\">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
       else "%s %s".format(coach.first, coach.last)
@@ -75,21 +75,15 @@ class SchoolId {
     else "Coaches"
   }
   
-  /*
-  def getValidId //TODO
-  */
-  
-  /*
-    def get_valid_id(self, grade):
-        student_ids = StudentID.objects.filter(school_id=self, grade=grade)
-        used_ids = [int(student_id.glml_id[4:]) for student_id in student_ids]
-        all_ids = range(1, 100)
-        [all_ids.remove(id) for id in used_ids if id in all_ids]
-        id = unicode(min(all_ids))
-        if len(id) == 1:
-            return u'0%s' % id
-        return id
-   */
+  def getValidId(grade: Int): String = { 
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QStudentId.candidate
+    val studentIds = pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().filter(stuId => stuId.grade == grade)
+    val unusedIds = List.range(1, 99) diff studentIds.map((stuId: StudentId) => stuId.glmlId.substring(4).toInt)
+    val id = unusedIds.min.toString
+    if (id.length == 1) "0" + id
+    else id
+  }
 
 }
 

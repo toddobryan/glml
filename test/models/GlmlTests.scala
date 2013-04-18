@@ -36,7 +36,9 @@ class glmlTests extends FunSuite {
   }
   
   //TODO: StudentId.getCumulativeScore()
-  //TODO: District.getTopStudents()
+  //TODO: District.getTopStudents(testDate: Option[TestDate])
   //TODO: SchoolId.getCumulativeScore()
-  //TODO: SchoolId.coachesStr()
+  //TODO: SchoolId.coachesEmails
+  //TODO: SchoolId.coachPlural
+  //TODO: SchoolId.getValidId(grade: Int)
 }
