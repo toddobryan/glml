@@ -42,11 +42,10 @@ class StudentId {
   def grade: Int = _grade
   def grade_=(theGrade: Int) { _grade = theGrade }
   
-  def getCumulativeScore: BigDecimal = {
+  def getCumulativeScore(): BigDecimal = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QTest.candidate
-    pm.query[Test].filter(cand.studentId.eq(this)).executeList().foldRight[BigDecimal](BigDecimal(0.0))(
-        (t: Test, sum: BigDecimal) => t.score + sum)
+    pm.query[Test].filter(cand.studentId.eq(this)).executeList().foldLeft(BigDecimal(0.0))((sum, test) => test.score + sum)
   }
   
   override def toString: String = "%s: %s (%s)".format(schoolId.district.year.slug, student, glmlId)		  

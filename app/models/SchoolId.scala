@@ -53,21 +53,20 @@ class SchoolId {
   def getCumulativeScore(): BigDecimal = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QStudentId.candidate
-    pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().foldRight[BigDecimal](BigDecimal(0.0))((s: StudentId, sum: BigDecimal) => t.score + sum)
+    pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().foldLeft(BigDecimal(0.0))((sum, studentId) => studentId.getCumulativeScore() + sum)
   }
   
-  // not sure if I need parens here
-  def coachesNames(): Set[String] = {
+  def coachesNames: Set[String] = {
     coaches.map(_.fullName())
   }
   
-  // not sure if I need parens here
-  // RENAME THIS DARNED METHOD NAME. ARGH!
+  // when implementing in views, I should disable autoescaping using @Html(coachesStr())
+  // RENAME THIS DARNED METHOD NAME. ARGH! (maybe something like coachesEmails()?)
   def coachesStr(): List[String] = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QUser.candidate
     pm.query[User].executeList() map { (coach: User) =>
-      if (!coach.email.isEmpty) "%s %s - <a href="mailto:%s">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
+      if (!coach.email.isEmpty) "%s %s - <a href=\"mailto:%s\">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
       else "%s %s".format(coach.first, coach.last)
     }
   }

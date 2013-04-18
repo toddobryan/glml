@@ -43,8 +43,7 @@ class District {
       val schoolIdList = pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
       schoolIdList.map((s: SchoolId) => 
           (s.school.name, 
-           testListDate.filter((t: Test) => t.studentId.schoolId.eq(s)).foldRight[BigDecimal](BigDecimal(0.0))(
-             (t: Test, sum: BigDecimal) => t.score + sum), 
+           testListDate.filter((t: Test) => t.studentId.schoolId.eq(s)).foldLeft(BigDecimal(0.0))((sum, test) => test.score + sum),
            s.coachesNames
           )
       ).sortBy(_._2).reverse
