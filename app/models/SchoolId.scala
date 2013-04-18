@@ -69,18 +69,17 @@ class SchoolId {
     }
   }
   
+  // renamed from coachWord
+  def coachPlural: String = {
+    if (coaches.size == 1) "Coach"
+    else "Coaches"
+  }
+  
   /*
-  def coachWord //TODO
   def getValidId //TODO
   */
   
   /*
-    def coach_word(self):
-        coach = u'Coach'
-        if self.coaches.count() < 2:
-            return coach 
-        return u'%ses' % coach
-
     def get_valid_id(self, grade):
         student_ids = StudentID.objects.filter(school_id=self, grade=grade)
         used_ids = [int(student_id.glml_id[4:]) for student_id in student_ids]
