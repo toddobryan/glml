@@ -46,8 +46,35 @@ class Test {
   }
   
   def rescore(): BigDecimal = {
+    def correctPoints(qNumber: Int): BigDecimal = {
+      if (qNumber <= 6) BigDecimal(2)
+      else if (qNumber <= 12) BigDecimal(3)
+      else if (qNumber <= 18) BigDecimal(4)
+      else BigDecimal(5)
+    }
     
-    BigDecimal(0.0) //TODO
+    def incorrectPoints(qNumber: Int) = {
+      if (qNumber <= 6) BigDecimal(-0.5)
+      else if (qNumber <= 12) BigDecimal(-0.75)
+      else if (qNumber <= 18) BigDecimal(-1.00)
+      else BigDecimal(-1.25)
+    }
+    
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QQuestion.candidate
+    
+    val key = testDate.getKey()
+    val keyMap = pm.query[Question].filter(cand.test.eq(key)).executeList().map((q: Question) => (q.number, q.answer)).toMap
+    val questionList = pm.query[Question].filter(cand.test.eq(this)).executeList()
+    val pointsList = questionList map { (q: Question) => 
+      if (keyMap.contains(q.number)) {
+        if (q.answer.toUpperCase() == keyMap(q.number).toUpperCase()) correctPoints(q.number)
+        else if (q.answer == "") BigDecimal(0.0)
+        else incorrectPoints(q.number)
+      } else BigDecimal(0.0)
+    }
+    
+    pointsList.foldLeft(BigDecimal(0.0))(_+_)
   }
   
   /*
