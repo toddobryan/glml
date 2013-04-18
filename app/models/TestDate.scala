@@ -4,6 +4,9 @@ import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
 
+import scalajdo.ScalaPersistenceManager
+import scalajdo.DataStore
+
 import org.joda.time.{DateTime, LocalDate}
 
 @PersistenceCapable(detachable="true")
@@ -30,9 +33,28 @@ class TestDate {
   def year: Year = _year
   def year_=(theYear: Year) { _year = theYear }
   
-  def getKey {} //TODO
+  def getKey(): Test = {
+    val answerKeyStudentId = "999999"
+    val answerKeyStudentName = "KEY"
+    
+    val pm: ScalaPersistenceManager = DataStore.pm
+    val cand = QTest.candidate
+    val varble = QStudentId.variable("StudentId")
+    pm.query[Test].filter(cand.studentId.eq(varble).and(varble.glmlId.eq(answerKeyStudentId))).executeList()(0)
+  } 
   
   def pdf {} //TODO
+  
+  /*
+   def pdf(self):
+        import os
+        from django.conf import settings
+        filename = os.path.join(u'archive', self.date.strftime('%Y-%m-%d') + u'.pdf')
+        if os.path.exists(os.path.join(settings.MEDIA_ROOT, filename)):
+            return settings.MEDIA_URL + filename
+        else:
+            return None
+   */
   
   override def toString: String = "%s: %s".format(year.slug, date)
 }

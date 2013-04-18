@@ -41,4 +41,6 @@ class glmlTests extends FunSuite {
   //TODO: SchoolId.getValidId(grade: Int)
   //TODO: Test.compareMapping()
   //TODO: Test.rescore()
+  //TODO: TestDate.getKey()
+  //TODO: TestDate.pdf
 }

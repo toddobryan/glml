@@ -81,6 +81,7 @@ class SchoolId {
     val studentIds = pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().filter(stuId => stuId.grade == grade)
     val unusedIds = List.range(1, 99) diff studentIds.map((stuId: StudentId) => stuId.glmlId.substring(4).toInt)
     val id = unusedIds.min.toString
+    
     if (id.length == 1) "0" + id
     else id
   }

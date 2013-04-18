@@ -3,6 +3,7 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
+
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 

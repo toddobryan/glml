@@ -74,12 +74,12 @@ class District {
       )
     } else {
       val cand = QStudentId.candidate
-      val varble = QSchoolId.variable("district")
-      val testListDistrict = pm.query[StudentId].filter(cand.schoolId.eq(varble).and(varble.district.eq(this))).executeList()
+      val varble = QSchoolId.variable("SchoolId")
+      val testDistrictList = pm.query[StudentId].filter(cand.schoolId.eq(varble).and(varble.district.eq(this))).executeList()
       val grades = List(9, 10, 11, 12)
       grades.map((grade: Int) => 
           (grade,
-           makePlaceList(testListDistrict.filter((s: StudentId) => s.grade == grade).map((s: StudentId) => (s, s.getCumulativeScore)))
+           makePlaceList(testDistrictList.filter((s: StudentId) => s.grade == grade).map((s: StudentId) => (s, s.getCumulativeScore)))
           )
       )
     }
