@@ -57,12 +57,12 @@ class SchoolId {
   }
   
   def coachesNames: Set[String] = {
-    coaches.map(_.fullName())
+    coaches map ( _.fullName() )
   }
   
-  // when implementing in views, I should disable autoescaping using @Html(coachesStr())
-  // RENAME THIS DARNED METHOD NAME. ARGH! (maybe something like coachesEmails()?)
-  def coachesStr(): List[String] = {
+  // when implementing in views, disable automatic HTML escaping using @Html(coachesStr())
+  // renamed from coachesStr
+  def coachesEmails(): List[String] = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QUser.candidate
     pm.query[User].executeList() map { (coach: User) =>
@@ -70,20 +70,6 @@ class SchoolId {
       else "%s %s".format(coach.first, coach.last)
     }
   }
-  
-  /*
-   def coaches_str(self):
-        ret = []
-        for coach in self.coaches.all():
-            email = coach.email
-            if email:
-                ret.append('%s %s - <a href="mailto:%s">%s</a>' % (coach.first_name,
-                                                                   coach.last_name,
-                                                                   email, email))
-            else:
-                ret.append('%s %s' % (coach.first_name, coach.last_name))
-        return ret
-  */
   
   /*
   def coachWord //TODO
