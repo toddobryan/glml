@@ -57,6 +57,14 @@ class Student extends Ordered[Student] {
     false //TODO
   }
   
+  /*
+   def coached_by(self, coach):
+        for student_id in self.studentid_set.all():
+            if coach in student_id.school_id.school.coaches():
+                return True
+        return coach.is_superuser
+   */
+  
   def name: String = toString
   
   override def toString: String = {

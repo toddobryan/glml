@@ -77,45 +77,6 @@ class Test {
     pointsList.foldLeft(BigDecimal(0.0))(_+_)
   }
   
-  /*
-    def rescore(self):
-        score = 0.0
-        key = self.test_date.get_key()
-        answer_list = dict([(q.number, q.answer) for q in key.question_set.all()])
-        question_list = self.question_set.all()
-        for question in question_list:
-            if question.number in answer_list:
-                correct_answer = answer_list[question.number]
-                if question.answer.upper() == correct_answer.upper():
-                    #correct
-                    if question.number <= 6:
-                        score += 2
-                    elif question.number <= 12:
-                        score += 3
-                    elif question.number <= 18:
-                        score += 4
-                    elif question.number <= 24:
-                        score += 5
-                elif question.answer == "":
-                    # Score is untouched.
-                    pass
-                else:
-                    #incorrect
-                    if question.number <= 6:
-                        score -= .5
-                    elif question.number <= 12:
-                        score -= .75
-                    elif question.number <= 18:
-                        score -= 1.00
-                    elif question.number <= 24:
-                        score -= 1.25
-            else:
-                pass
-        self.score = unicode(score)
-        self.save()
-        return score
-   */
-  
   override def toString: String = "%s %s (%d)".format(testDate, studentId.toString.substring(6), score)
 }
 
