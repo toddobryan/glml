@@ -75,7 +75,9 @@ class Student extends Ordered[Student] {
 }
 
 object Student {
-  def getOrCreateAnswerStudent: Student = {
+  val answerKeyStudentName = "KEY"
+  
+  def getOrCreateAnswerKeyStudent: Student = {
     null //TODO
   }
 }

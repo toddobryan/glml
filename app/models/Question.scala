@@ -13,6 +13,7 @@ class Question {
   private[this] var _number: Int = _
   @Column(length=1)
   private[this] var _answer: String = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _test: Test = _
   
   def this(number: Int, answer: String, test: Test) = {

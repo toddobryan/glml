@@ -13,7 +13,9 @@ class Test {
   @PrimaryKey
   @Persistent(valueStrategy=IdGeneratorStrategy.INCREMENT)
   private[this] var _id: Long = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _testDate: TestDate = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _studentId: StudentId = _
   @Persistent
   @Column(length=4, scale=2)

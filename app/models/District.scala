@@ -97,7 +97,8 @@ object District {
         return District.objects.get_or_create(glml_id=ANSWER_STUDENT_ID[0],
                                               year=year)
 */
-  def getOrCreateAnswerKeyDistrict(maybeYear: Option[Year]): District = {
+  
+  def getOrCreateAnswerKeyDistrict(maybeYear: Option[Year] = None): District = {
     val glmlId = StudentId.answerKeyStudentId.substring(0, 1)
     val year = maybeYear.getOrElse(Year.currentYear)
     val cand = QDistrict.candidate

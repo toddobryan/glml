@@ -48,8 +48,17 @@ class School {
 }
 
 object School {
-  def getOrCreateAnswerSchool: School = {
-    null //TODO
+  def getOrCreateAnswerKeySchool: School = {
+    val name = Student.answerKeyStudentName
+    val cand = QSchool.candidate
+    DataStore.pm.query[School].filter(cand.name.eq(name)).executeOption() match {
+      case Some(s) => s
+      case None => {
+        val newSchool = new School(name)
+        DataStore.pm.makePersistent(newSchool)
+        newSchool
+      }
+    }
   }
 }
 

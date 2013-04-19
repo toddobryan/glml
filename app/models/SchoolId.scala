@@ -20,7 +20,9 @@ class SchoolId {
   private[this] var _id: Long = _
   @Column(allowsNull="false", length=2)
   private[this] var _glmlId: String = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _school: School = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _district: District = _
   @Element(types=Array(classOf[User]))
   @Join
@@ -89,28 +91,30 @@ class SchoolId {
 }
 
 object SchoolId {
-  /*
-    @staticmethod
-    def get_or_create_answer_school_id(year=None):
-        if not year:
-            year = Year.get_current_year()
-        district, created = District.get_or_create_answer_district(year)
-        school, created = School.get_or_create_answer_school()
-        school_ids = SchoolID.objects.filter(school=school, district=district)
-        if school_ids:
-            return school_ids[0], False
-        return SchoolID.objects.create(glml_id=ANSWER_STUDENT_ID[:2],
-                                       school=school,
-                                       district=district), True
-
-   */
-  def getOrCreateAnswerKeySchoolId(year: Option[Year]): SchoolId = {
-    val yr = year.getOrElse(Year.currentYear)
-    
+  def getOrCreateAnswerKeySchoolId(maybeYear: Option[Year] = None): SchoolId = {
+    val glmlId = StudentId.answerKeyStudentId.substring(1, 3)
+    val year = maybeYear.getOrElse(Year.currentYear)
+    val cand = QSchoolId.candidate
+    val district = District.getOrCreateAnswerKeyDistrict(Some(year))
+    val school = School.getOrCreateAnswerKeySchool
+    DataStore.pm.query[SchoolId].filter(cand.school.eq(school).and(
+        cand.district.eq(district))).executeOption() match {
+      case Some(s) => s
+      case None => {
+        val newSchoolId = new SchoolId(glmlId, school, district, null)
+        DataStore.pm.makePersistent(newSchoolId)
+        newSchoolId
+      }
+    }
   }
-  
-  def getCurrentSchoolId(year: Option[Year]): SchoolId = {
-    null //TODO
+    
+  def getCurrentSchoolId(user: User, maybeYear: Option[Year] = None): SchoolId = {
+    val year = maybeYear.getOrElse(Year.currentYear)
+    val cand = QSchoolId.candidate
+    val varble = QDistrict.variable("District")
+    val schoolIds = DataStore.pm.query[SchoolId].filter(cand.district.eq(varble).and(
+        varble.year.eq(year))).executeList().filter(_.coaches.contains(user))
+    if (!schoolIds.isEmpty) schoolIds(0) else null
   }
 }
 

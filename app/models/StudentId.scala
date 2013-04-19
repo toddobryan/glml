@@ -16,7 +16,9 @@ class StudentId {
   private[this] var _id: Long = _
   @Column(allowsNull="false", length=6)
   private[this] var _glmlId: String = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _student: Student = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _schoolId: SchoolId = _
   private[this] var _grade: Int = _
   
@@ -53,10 +55,11 @@ class StudentId {
 
 object StudentId {
   val answerKeyStudentId = "999999"
-  
-  def getOrCreateAnswerStudentId(year: Option[Year] = None): StudentId = {
+    
+  def getOrCreateAnswerKeyStudentId(maybeYear: Option[Year] = None): StudentId = {
     null //TODO
   }
+  
 }
 
 trait QStudentId extends PersistableExpression[StudentId] {
