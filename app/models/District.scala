@@ -89,8 +89,27 @@ class District {
 }
 
 object District {
-  def getOrCreateAnswerDistrict(year: Option[Year]): District = {
-    null //TODO
+/*
+    @staticmethod
+    def get_or_create_answer_district(year=None):
+        if not year:
+            year = Year.get_current_year()
+        return District.objects.get_or_create(glml_id=ANSWER_STUDENT_ID[0],
+                                              year=year)
+*/
+  def getOrCreateAnswerKeyDistrict(maybeYear: Option[Year]): District = {
+    val glmlId = StudentId.answerKeyStudentId.substring(0, 1)
+    val year = maybeYear.getOrElse(Year.currentYear)
+    val cand = QDistrict.candidate
+    DataStore.pm.query[District].filter(cand.glmlId.eq(glmlId).and(
+        cand.year.eq(year))).executeOption() match {
+      case Some(d) => d
+      case None => {
+        val newDistrict = new District(glmlId, year)
+        DataStore.pm.makePersistent(newDistrict)
+        newDistrict
+      }
+    }
   }
 }
 
@@ -99,10 +118,10 @@ trait QDistrict extends PersistableExpression[District] {
   def id: NumericExpression[Long] = _id
 
   private[this] lazy val _glmlId: StringExpression = new StringExpressionImpl(this, "_glmlId")
-  def name: StringExpression = _glmlId
+  def glmlId: StringExpression = _glmlId
   
   private[this] lazy val _year: ObjectExpression[Year] = new ObjectExpressionImpl[Year](this, "_year")
-  def term: ObjectExpression[Year] = _year
+  def year: ObjectExpression[Year] = _year
 }
 
 object QDistrict {

@@ -52,6 +52,8 @@ class StudentId {
 }
 
 object StudentId {
+  val answerKeyStudentId = "999999"
+  
   def getOrCreateAnswerStudentId(year: Option[Year] = None): StudentId = {
     null //TODO
   }

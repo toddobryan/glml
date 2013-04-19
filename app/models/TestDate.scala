@@ -15,6 +15,7 @@ class TestDate {
   @Persistent(defaultFetchGroup="true")
   @Unique
   private[this] var _date: java.sql.Date = _
+  @Persistent(defaultFetchGroup="true")
   private[this] var _year: Year = _
   
   def this(date: LocalDate, year: Year) {
