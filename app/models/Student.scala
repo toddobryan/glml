@@ -3,6 +3,8 @@ package models
 import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
+import scalajdo.ScalaPersistenceManager
+import scalajdo.DataStore
 
 import auth.User
 
@@ -46,6 +48,13 @@ class Student extends Ordered[Student] {
     _suffix = theSuffix.getOrElse(null)
   }
   
+  def isKey: Boolean = {
+    lastName == Student.answerKeyStudentName &&
+    firstName == Student.answerKeyStudentName &&
+    middleName == Student.answerKeyStudentName &&
+    suffix == Student.answerKeyStudentName
+  }
+  
   def compare(that: Student):Int = {
     import Ordering._
     Ordering.Tuple3(Ordering.String, Ordering.String, Ordering.Option[String]).compare(
@@ -76,8 +85,16 @@ class Student extends Ordered[Student] {
 
 object Student {
   val answerKeyStudentName = "KEY"
-  
+
   def getOrCreateAnswerKeyStudent: Student = {
-    null //TODO
+    DataStore.pm.query[Student].executeList().filter(_.isKey) match {
+      case x :: xs => x
+      case Nil => {
+        val newStudent = new Student(Student.answerKeyStudentName, Student.answerKeyStudentName,
+            Some(Student.answerKeyStudentName), Some(Student.answerKeyStudentName))
+        DataStore.pm.makePersistent(newStudent)
+        newStudent
+      }
+    }
   }
 }

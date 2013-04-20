@@ -30,20 +30,10 @@ class School {
   def coaches: List[User] = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QSchoolId.candidate
-    // pm.query[SchoolId].filter()
-    
-    Nil //TODO
+    val allCoaches = pm.query[SchoolId].filter(cand.school.eq(this)).executeList() map { _.coaches }
+    allCoaches.flatten.toSet.toList
   }
-  
-  /*
-   def coaches(self):
-        coaches = set()
-        for school_id in self.schoolid_set.all():
-            for coach in school_id.coaches.all():
-                coaches.add(coach)
-        return list(coaches)
-   */
-  
+
   override def toString: String = name
 }
 
