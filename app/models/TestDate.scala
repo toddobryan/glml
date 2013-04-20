@@ -40,8 +40,8 @@ class TestDate {
     
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QTest.candidate
-    val varble = QStudentId.variable("StudentId")
-    pm.query[Test].filter(cand.studentId.eq(varble).and(varble.glmlId.eq(answerKeyStudentId))).executeList()(0)
+    val testsThisDate = pm.query[Test].filter(cand.testDate.eq(this)).executeList()
+    testsThisDate.filter(_.studentId.glmlId == answerKeyStudentId)(0)
   } 
   
   def pdf {} //TODO
@@ -64,6 +64,30 @@ object TestDate {
   def importTest(data: Object) {
     //TODO
   }
+  
+  /*
+    @staticmethod
+    def import_test(cleaned_data):
+        test_date = TestDate.objects.create(date=cleaned_data['date'])
+        sheet = cleaned_data['excel_file']
+        i = 0
+        rows = []
+        import re
+        while i < sheet.nrows:
+            row = [cell.value for cell in sheet.row(i)][:25]
+            if row and re.match(r'\d{6}', unicode(row[0])[:6]):
+                rows.append(row)
+            i += 1
+        for row in rows:
+            student_id = StudentID.objects.get(glml_id=unicode(row[0])[:6], school_id__district__year__id=test_date.year.id)
+            test = Test.objects.create(test_date=test_date, student_id=student_id, score=0)
+            i = 1
+            while i < len(row):
+                q = Question.objects.create(number=i, test=test, answer=row[i])
+                i += 1
+        for test in test_date.test_set.all():
+            test.rescore()
+   */
 }
 
 trait QTestDate extends PersistableExpression[TestDate] {
