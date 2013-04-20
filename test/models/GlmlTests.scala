@@ -14,7 +14,7 @@ class glmlTests extends FunSuite {
   
   val cand = QDistrict.candidate
   val cand2 = QUser.candidate
-  val d1 = pm.query[District].filter(cand.name.eq("1")).executeOption().get
+  val d1 = pm.query[District].filter(cand.glmlId.eq("1")).executeOption().get
   val coach1 = pm.query[User].executeList()
   
   test("District.getTopSchools() cumulative score") {
@@ -43,4 +43,6 @@ class glmlTests extends FunSuite {
   //TODO: Test.rescore()
   //TODO: TestDate.getKey()
   //TODO: TestDate.pdf
+  //TODO: getOrCreateAnswerKey x 6
+  //TODO: SchoolId.getCurrentSchoolId()
 }

@@ -55,11 +55,23 @@ class StudentId {
 
 object StudentId {
   val answerKeyStudentId = "999999"
-    
+
   def getOrCreateAnswerKeyStudentId(maybeYear: Option[Year] = None): StudentId = {
-    null //TODO
+    val glmlId = StudentId.answerKeyStudentId
+    val year = maybeYear.getOrElse(Year.currentYear)
+    val student = Student.getOrCreateAnswerKeyStudent
+    val schoolId = SchoolId.getOrCreateAnswerKeySchoolId(Some(year))
+    val cand = QStudentId.candidate
+    DataStore.pm.query[StudentId].filter(cand.student.eq(student).and(
+        cand.schoolId.eq(schoolId))).executeOption() match {
+      case Some(s) => s
+      case None => {
+        val newStudentId = new StudentId(glmlId, student, schoolId, 9)
+        DataStore.pm.makePersistent(newStudentId)
+        newStudentId
+      }
+    }
   }
-  
 }
 
 trait QStudentId extends PersistableExpression[StudentId] {
