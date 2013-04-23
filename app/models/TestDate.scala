@@ -8,6 +8,7 @@ import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 
 import org.joda.time.{DateTime, LocalDate}
+import java.io.File
 
 @PersistenceCapable(detachable="true")
 class TestDate {
@@ -61,7 +62,7 @@ class TestDate {
 }
 
 object TestDate {
-  def importTest(data: Object) {
+  def importTest(date: LocalDate, excel: File) {
     //TODO
   }
   
