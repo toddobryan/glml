@@ -8,7 +8,7 @@ import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 
 import org.joda.time.{DateTime, LocalDate}
-import java.io.File
+import java.io.{File, FileInputStream}
 
 @PersistenceCapable(detachable="true")
 class TestDate {

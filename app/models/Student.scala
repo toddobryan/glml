@@ -63,16 +63,12 @@ class Student extends Ordered[Student] {
   }
   
   def isCoachedBy(coach: User): Boolean = {
-    false //TODO
+    val pm = DataStore.pm
+    val cand = QStudentId.candidate
+    val studentIdList = pm.query[StudentId].filter(cand.student.eq(this)).executeList()
+    val coachesList = studentIdList map { _.schoolId.school.coaches }.flatten.toSet
+    if (coachesList contains coach) true else coach.isSuperUser
   }
-  
-  /*
-   def coached_by(self, coach):
-        for student_id in self.studentid_set.all():
-            if coach in student_id.school_id.school.coaches():
-                return True
-        return coach.is_superuser
-   */
   
   def name: String = toString
   
