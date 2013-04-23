@@ -9,6 +9,7 @@ import scalajdo.DataStore
 
 import org.joda.time.{DateTime, LocalDate}
 import java.io.{File, FileInputStream}
+import org.apache.poi.ss.usermodel.WorkbookFactory
 
 @PersistenceCapable(detachable="true")
 class TestDate {
@@ -62,7 +63,12 @@ class TestDate {
 }
 
 object TestDate {
-  def importTest(date: LocalDate, excel: File) {
+  def importTest(date: LocalDate, file: File) {
+    val workbook = WorkbookFactory.create(file)
+    val excel = workbook.getSheetAt(0)
+    
+    //use List.foreach
+    
     //TODO
   }
   

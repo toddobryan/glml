@@ -66,8 +66,8 @@ class Student extends Ordered[Student] {
     val pm = DataStore.pm
     val cand = QStudentId.candidate
     val studentIdList = pm.query[StudentId].filter(cand.student.eq(this)).executeList()
-    val coachesList = studentIdList map { _.schoolId.school.coaches }.flatten.toSet
-    if (coachesList contains coach) true else coach.isSuperUser
+    val coachesList = studentIdList map { (stuId: StudentId) => stuId.schoolId.school.coaches }
+    if (coachesList.flatten.toSet contains coach) true else coach.isSuperUser
   }
   
   def name: String = toString

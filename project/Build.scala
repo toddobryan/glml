@@ -17,7 +17,10 @@ object ApplicationBuild extends Build {
     "commons-codec" % "commons-codec" % "1.6",
     "javax.mail" % "mail" % "1.4.5",
     "org.mindrot" % "jbcrypt" % "0.3m",
+    
     "org.apache.poi" % "poi" % "3.9",
+    "org.apache.poi" % "poi-ooxml" % "3.9",
+    "org.apache.poi" % "poi-ooxml-schemas" % "3.9",
 
     "com.h2database" % "h2" % "1.3.166",
     "javax.jdo" % "jdo-api" % "3.0",
