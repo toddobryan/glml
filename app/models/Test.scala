@@ -47,7 +47,7 @@ class Test {
     Map("name" -> studentId.student.name, "questions" -> questionMap)
   }
   
-  def rescore(): BigDecimal = {
+  def rescore() {
     def correctPoints(qNumber: Int): BigDecimal = {
       if (qNumber <= 6) BigDecimal(2)
       else if (qNumber <= 12) BigDecimal(3)
@@ -76,7 +76,7 @@ class Test {
       } else BigDecimal(0.0)
     }
     
-    pointsList.foldLeft(BigDecimal(0.0))(_+_)
+    score_=(pointsList.foldLeft(BigDecimal(0.0))(_+_))
   }
   
   override def toString: String = "%s %s (%d)".format(testDate, studentId.toString.substring(6), score)
