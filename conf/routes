@@ -3,7 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                           controllers.Application.index()
+GET     /$year<\d{4}>-$month<\d{1,2}>-$day<\d{1,2}> controllers.Application.indexWithDate(year: Int, month: Int, day: Int)
 
 # Auth
 GET     /login                      controllers.Auth.login

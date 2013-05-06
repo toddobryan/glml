@@ -95,7 +95,7 @@ object WebScala extends Controller {
         val maybeFile = File.getById(id)
     	maybeFile match {
     	  case Some(f) => Ok(views.html.webscala.getFile(f))
-    	  case None => Ok(views.html.index("File not found"))
+    	  case None => Ok(views.html.index(null))
     	}
     }
 }

@@ -5,6 +5,7 @@ import javax.jdo.annotations._
 import org.datanucleus.api.jdo.query._
 import org.datanucleus.query.typesafe._
 import scalajdo.DataStore
+import models.Year
 
 @PersistenceCapable(detachable="true")
 class Visit {
@@ -26,11 +27,16 @@ class Visit {
   def redirectUrl_=(theRedirectUrl: Option[String]) { _redirectUrl = theRedirectUrl.getOrElse(null) }
   def redirectUrl_=(theRedirectUrl: String) { _redirectUrl = theRedirectUrl }
   
+  @Persistent(defaultFetchGroup="true")
+  var _workingYear: Year = _
+  def workingYear: Option[Year] = Option(_workingYear)
+  def workingYear_=(theWorkingYear: Option[Year]) {_workingYear = theWorkingYear.getOrElse(null)}
+  
   def this(expiration: Long, maybeUser: Option[User]) = {
     this()
     expiration_=(expiration)
     user_=(maybeUser)
-    
+    workingYear_=(Some(Year.currentYear))
   }
   
   def isExpired: Boolean = System.currentTimeMillis > expiration
