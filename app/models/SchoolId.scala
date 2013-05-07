@@ -66,7 +66,7 @@ class SchoolId {
   // renamed from coachesStr
   def coachesEmails: Set[String] = {
     coaches map { (coach: User) =>
-      if (!coach.email.isEmpty) "%s %s - <a href=\"mailto:%s\">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
+      if (coach.email.isDefined) "%s %s - <a href=\"mailto:%s\">%s</a>".format(coach.first, coach.last, coach.email.get, coach.email.get)
       else "%s %s".format(coach.first, coach.last)
     }
   }

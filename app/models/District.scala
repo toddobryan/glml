@@ -37,7 +37,7 @@ class District {
   def getTopSchools(testDate: Option[TestDate]): List[(String, BigDecimal, Set[String])] = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QSchoolId.candidate
-    if (!testDate.isEmpty) {
+    if (testDate.isDefined) {
       val cand2 = QTest.candidate
       val testListDate = pm.query[Test].filter(cand2.testDate.eq(testDate.get)).executeList()
       val schoolIdList = pm.query[SchoolId].filter(cand.district.eq(this)).executeList()
@@ -62,7 +62,7 @@ class District {
     }
     
     val pm: ScalaPersistenceManager = DataStore.pm
-    if (!testDate.isEmpty) {
+    if (testDate.isDefined) {
       val cand = QTest.candidate
       val testListDateAndDistrict = pm.query[Test].filter(cand.testDate.eq(testDate.get)).executeList().filter(
           (t: Test) => t.studentId.schoolId.district.eq(this))
