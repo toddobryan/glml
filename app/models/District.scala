@@ -89,14 +89,6 @@ class District {
 }
 
 object District {
-/*
-    @staticmethod
-    def get_or_create_answer_district(year=None):
-        if not year:
-            year = Year.get_current_year()
-        return District.objects.get_or_create(glml_id=ANSWER_STUDENT_ID[0],
-                                              year=year)
-*/
   
   def getOrCreateAnswerKeyDistrict(maybeYear: Option[Year] = None): District = {
     val glmlId = StudentId.answerKeyStudentId.substring(0, 1)
