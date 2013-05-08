@@ -50,12 +50,13 @@ object Application extends Controller {
     }
   }
   
-  // I don't think this will work yet
-  def indexWithDate(year: Int, month: Int, day: Int) = VisitAction { implicit req =>
+  def indexWithDate(year: Int, month: Int, day: Int) = {
     try {
-      index(Some(new LocalDate(year, month, day))).asInstanceOf[PlainResult]
+      index(Some(new LocalDate(year, month, day)))
     } catch {
-      case e: IllegalFieldValueException => Redirect(routes.Application.index()).flashing("error" -> "That's not a valid date!")
+      case e: IllegalFieldValueException => VisitAction { implicit req =>
+        Redirect(routes.Application.index()).flashing("error" -> "That's not a valid date!")
+      }
     }
   }
   
