@@ -23,7 +23,7 @@ object Application extends Controller {
     
     val workingYear = req.visit.workingYear
     
-    def createData(testDate: Option[TestDate]) = VisitAction { implicit req =>
+    def createData(testDate: Option[TestDate]) = {
       val districtCand = QDistrict.candidate
       val answerKeyDistrictId = StudentId.answerKeyStudentId.substring(0, 1)
       val districtList = pm.query[District].filter(districtCand.year.eq(workingYear.getOrElse(null))).executeList() filterNot (_.glmlId == answerKeyDistrictId)
@@ -42,14 +42,15 @@ object Application extends Controller {
             req.visit.workingYear_=(Some(testDate.year))
             Redirect(routes.Application.indexWithDate(maybeDate.get.getYear, maybeDate.get.getMonthOfYear, maybeDate.get.getDayOfMonth))
           }
-          createData(Some(testDate)).asInstanceOf[PlainResult]
+          createData(Some(testDate))
         }
         case None => Redirect(routes.Application.index()).flashing("error" -> "That's not a valid date!")
       }
-      case None => createData(None).asInstanceOf[PlainResult]
+      case None => createData(None)
     }
   }
   
+  // I don't think this will work yet
   def indexWithDate(year: Int, month: Int, day: Int) = VisitAction { implicit req =>
     try {
       index(Some(new LocalDate(year, month, day))).asInstanceOf[PlainResult]

@@ -30,6 +30,12 @@
     <div class="span9">
       <div class= "row">
       
+      @for(entry <- dataList) {
+        <section id="@entry.district.glmlId">
+          <h3>District @entry.district.glmlId</h3>
+        </section>
+      }
+      
         <section id="1">
           <h3>District 1</h3>
           
