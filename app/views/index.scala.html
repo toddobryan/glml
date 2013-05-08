@@ -8,19 +8,22 @@
       <ul class="nav nav-list bs-docs-sidenav">
         <li class="nav-header">Selected Year:</li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">(current year)<b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">@req.visit.workingYear<b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/2012-2013">(years)</a></li>
           </ul>
         </li>
         <li class="divider"></li>    
         <li class="nav-header">Districts</li>
-        <li><a href="#1"><i class="icon-chevron-right"></i> All</a></li>
-        <li><a href="#2"><i class="icon-chevron-right"></i> (districts)</a></li>
+        @for(entry <- dataList) {
+        <li><a href="#@entry.district.glmlId"><i class="icon-chevron-right"></i> District @entry.district.glmlId</a></li>
+        }
         <li class="divider"></li>
         <li class="nav-header">Test Dates</li>
-        <li><a href="#"><i class="icon-chevron-right"></i> Cumulative</a></li>
-        <li><a href="#date"><i class="icon-chevron-right"></i> (test dates)</a></li>
+        <li><a href="/"><i class="icon-chevron-right"></i> Cumulative</a></li>
+        @for(tDate <- testDates) {
+        <li><a href="/TODO"><i class="icon-chevron-right"></i> @tDate.date</a></li>
+        }
         <li class="divider"></li>
         <li><a href="#top"><i class="icon-chevron-right"></i> &uarr; Top</a></li>
       </ul>
@@ -33,24 +36,44 @@
       @for(entry <- dataList) {
         <section id="@entry.district.glmlId">
           <h3>District @entry.district.glmlId</h3>
+          
+          <table class="table table-striped table-condensed span9">
+		    <caption>Top Schools</caption>
+          	<thead>
+          	  <th>School</th>
+          	  <th>Coach</th>
+          	  <th>Score</th>
+          	</thead>
+          	@for(school <- entry.schools) {
+		    <tr>
+		      <td>@school._1</td>
+		      <td>@for(coach <- school._3) {@coach <br />}</td>
+		      <td>@school._2</td>
+		    </tr>
+		    }
+		  </table>
+		  
+		  @for(grade <- entry.students) {
+		  <table class="table table-striped table-condensed span9">
+		    <caption>Top @{grade._1}th Grade Students</caption>
+		    <thead>
+		      <th>Place</th>
+		      <th>Student</th>
+		      <th>School</th>
+		      <th>Score</th>
+		    </thead>
+		    @for(student <- grade._2) {
+			<tr>
+			  <td>@student._1</td>
+			  <td>@student._2.student.name</td>
+			  <td>@student._2.schoolId.school.name</td>
+			  <td>@student._3</td>
+			</tr>
+			}
+	      </table>
+	      }
         </section>
       }
-      
-        <section id="1">
-          <h3>District 1</h3>
-          
-	  	  <table class="table table-striped table-condensed span9">
-		    <caption>Top Schools</caption>
-          	<thead><th>School</th><th>Coach</th><th>Score</th></thead>
-		    <tr><td>duPont Manual</td><td>Becky Wahl</td><td>2467.50</td></tr>
-		  </table>
-
-		  <table class="table table-striped table-condensed span9">
-		    <caption>Top 9th Grade Students</caption>
-		    <thead><th>Place</th><th>Student</th><th>School</th><th>Score</th></thead>
-			<tr><td>1</td><td>Zhang, Yue</td><td>duPont Manual</td><td>237.00</td></tr>
-	      </table>
-		</section>
 		
 	  </div>
     </div>
