@@ -68,6 +68,9 @@
 		  @if(req.flash.get("error").isDefined) {
 		    <div class="alert alert-error">@req.flash("error")</div>
 		  }
+		  @if(req.flash.get("warn").isDefined) {
+		    <div class="alert">@req.flash("warn")</div>
+		  }
 	    </div>
 	      
 	    @content
