@@ -12,9 +12,14 @@
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
         @scripts
         <style type="text/css">
-          header {text-align:center}
+          header {text-align: center; height: 220px}
           body {padding-top: 40px;}
           @@media (max-width: 979px) {body {padding-top: 0px;}}
+          .affix {position: fixed;}
+          .bs-docs-sidenav.affix {top: 100px; width: 15%;}
+          .table {margin: auto;}
+          .table th {text-align: center; vertical-align: middle;}
+          .table td {text-align: center; vertical-align: middle;}
         </style>
     </head>
     
