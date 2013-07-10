@@ -10,10 +10,10 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
-    "org.scala-lang" % "scala-compiler" % "2.10.0",
-    "org.scala-lang" % "scala-swing" % "2.10.0",
-    "org.scala-lang" % "scala-actors" % "2.10.0",
-    "org.scalatest" % "scalatest_2.10.0" % "2.0.M5" % "test",
+    "org.scala-lang" % "scala-compiler" % "2.10.2",
+    "org.scala-lang" % "scala-swing" % "2.10.2",
+    "org.scala-lang" % "scala-actors" % "2.10.2",
+    "org.scalatest" % "scalatest_2.10" % "2.0.M5b" % "test",
     "commons-codec" % "commons-codec" % "1.6",
     "javax.mail" % "mail" % "1.4.5",
     "org.mindrot" % "jbcrypt" % "0.3m",
@@ -38,6 +38,8 @@ object ApplicationBuild extends Build {
     // Add your own project settings here
     ((resolvers += "Sonatype Public" at "https://oss.sonatype.org/content/groups/public/") +:
      (resolvers += "Java.net" at "http://download.java.net/maven/2/") +:
+     (scalaVersion := "2.10.2") +:
+     (javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-bootclasspath", "/usr/lib/jvm/java-6-oracle/jre/lib/rt.jar")) +:
      (scalacOptions ++= Seq("-deprecation", "-feature")) +:
       Nucleus.settings): _*
     
