@@ -17,10 +17,13 @@ abstract class Form {
   def autoId: Option[String] = Some("id_%s")
   def prefix: Option[String] = None
   def labelSuffix: String = ":"
+  def postAddress: String = ""
+  def legend: Option[String] = None
   
   def asHtml(bound: Binding): Elem = {
-    <form method={ method } class="form-horizontal well"><fieldset>
+    <form method={ method } action={postAddress} class="form-horizontal well"><fieldset>
     { if (bound.formErrors.isEmpty) NodeSeq.Empty else { bound.formErrors.asHtml } }  
+    { legend match {case None => NodeSeq.Empty; case Some(l) => <legend>{l}</legend>} }
     {fields.flatMap(f => {
       val name = f.name
       val label = f.label.getOrElse(camel2TitleCase(f.name))

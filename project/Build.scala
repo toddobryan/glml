@@ -29,8 +29,9 @@ object ApplicationBuild extends Build {
     "org.datanucleus" % "datanucleus-enhancer" % "3.1.1",
     "org.datanucleus" % "datanucleus-jdo-query" % "3.0.2",
     "org.datanucleus" % "datanucleus-rdbms" % "3.1.4",
-    "org.datanucleus" % "datanucleus-jodatime" % "3.1.1"
+    "org.datanucleus" % "datanucleus-jodatime" % "3.1.1",
 
+    "com.typesafe.akka" % "akka-actor" % "2.0.1"
   )
 
 

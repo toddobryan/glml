@@ -1,11 +1,17 @@
 package util
 
+import java.util.Properties
 import javax.jdo.annotations._
+import javax.mail._
+import javax.mail.internet._
+import javax.activation._
+
 import org.datanucleus.query.typesafe._
 import org.datanucleus.api.jdo.query._
+ 
 
 // TODO: verify that it's a valid email address
-
+/*
 @PersistenceCapable(detachable="true")
 class Email {
 	private[this] var _value: String = _
@@ -44,4 +50,33 @@ object QEmail {
   def parameter(name: String): QEmail = QEmail(classOf[Email], name, ExpressionType.PARAMETER)
   
   def variable(name: String): QEmail = QEmail(classOf[Email], name, ExpressionType.VARIABLE)
+}
+*/
+object Email {
+  def sendEmail(sender: String, recipients: Array[String], subject: String, text: String) = {
+    val props = new Properties()
+    props.put("mail.smtp.auth", "true")
+    props.put("mail.smtp.starttls.enable", "true")
+	props.put("mail.smtp.host", "smtp.gmail.com")
+	props.put("mail.smtp.port", "587")
+	
+	val session: Session = Session.getInstance(props,
+	  new javax.mail.Authenticator() {
+	    override protected def getPasswordAuthentication: PasswordAuthentication = {
+		  return new PasswordAuthentication("glmltest0@gmail.com", "i love math tests");
+		}
+	})
+	
+	try {
+	  val message: Message = new MimeMessage(session)
+	  message.setFrom(new InternetAddress("glmltest0@gmail.com"))
+	  message.setRecipients(Message.RecipientType.TO, recipients.map(new InternetAddress(_)))
+	  message.setSubject(subject)
+	  message.setText(s"Do not reply to this email. It was sent by $sender. Contact them for more information.\n\n$text")
+	  Transport.send(message)
+	  System.out.println("Sent!")
+	} catch {
+	  case e: Exception => println("Uh oh\n" + e.toString())
+	}
+  }
 }

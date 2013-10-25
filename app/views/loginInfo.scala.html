@@ -2,11 +2,9 @@
 
 @(req.visit.user match {
   case None => {
-    <li>Not logged in.</li>
     <li><a href={ controllers.routes.Auth.login().toString }>Log in</a></li>
   }
   case Some(user) => {
-    <li>Logged in as: { user.fullName }</li>
     <li><a href={ controllers.routes.Auth.logout().toString }>Log out</a></li>
   }
 })

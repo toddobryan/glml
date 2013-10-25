@@ -46,9 +46,9 @@
                 <li class="">
                   <a href="/hallOfFame">Hall of Fame</a>
                 </li>
-                <li class="">
-                  <a href="/login">Log In</a>
-                </li>
+              </ul>
+              <ul class="nav pull-right">
+                @loginInfo()
               </ul>
             </div>
           </div>
@@ -67,19 +67,9 @@
     <!-- Flash Scope -->
       <div class="container">  
         <div class="content">
-		  @if(req.flash.get("message").isDefined) {
-		    <div class="alert alert-success">@req.flash("message")</div>
-		  }
-		  @if(req.flash.get("error").isDefined) {
-		    <div class="alert alert-error">@req.flash("error")</div>
-		  }
-		  @if(req.flash.get("warn").isDefined) {
-		    <div class="alert">@req.flash("warn")</div>
-		  }
+		  @messages()(req.flash)
+	      @content
 	    </div>
-	      
-	    @content
-	  
 	  </div>
 
     </body>

@@ -38,7 +38,7 @@ object VisitAction {
 }
 
 object Authenticated {
-  def apply(f: VisitRequest[AnyContent] => PlainResult) = VisitAction( implicit req => {
+  def apply(f: AuthVisitRequest[AnyContent] => PlainResult) = VisitAction( implicit req => {
 	req.visit.user match {
 	  case None => {
 	    req.visit.redirectUrl = req.path
@@ -47,11 +47,13 @@ object Authenticated {
 	  }
 	  case Some(user) => {
 	    implicit val u: User = user
-	    f(req)
+	    f(new AuthVisitRequest(req, u))
 	  }
 	}
   })
 }
+
+case class AuthVisitRequest[T](val vrequest: VisitRequest[T], val user: User)
 
 object Method {
   val GET = "GET"

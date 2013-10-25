@@ -1,0 +1,6 @@
+@(changePwForm: forms.Binding, changeEmailForm: forms.Binding)(implicit req: models.auth.VisitRequest[_])
+
+@main("Change Settings") {
+  @changePwForm.asHtml
+  @changeEmailForm.asHtml
+}

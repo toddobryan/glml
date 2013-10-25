@@ -2,7 +2,7 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import models.auth.VisitAction
+import models.auth._
 
 import models._
 
@@ -12,6 +12,12 @@ import org.datanucleus.query.typesafe._
 
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
+
+import forms._
+import forms.fields._
+import forms.widgets.Textarea
+
+import util.Email
 
 import org.joda.time.{DateTime, LocalDate, IllegalFieldValueException}
 
@@ -60,6 +66,45 @@ object Application extends Controller {
     }
   }
   
+  object SendEmailForm extends Form {
+    import DataStore.pm
+    val coachAndSchool = pm.query[School].executeList().flatMap {
+      s => { for (c <- s.coaches) yield (c, s.name) }
+    }
+    val emailOptions = coachAndSchool.map(t => (s"${t._1.fullName} - ${t._2}", t._1.email)
+       // Check that emails are defined 
+       ).filter(_._2.isDefined
+       // Convert Option[String] to String
+       ).map(t => (t._1, t._2.get))
+    val email = new ChoiceField[String]("Email", emailOptions)
+    val subject = new TextField("subject")
+    val message = new TextField("message") { override def widget = new Textarea(true) }
+    override def legend = Some("Send an Email")
+    
+    val fields = List(email, subject, message)
+  }
+  
+  def sendEmail = Authenticated { authReq => 
+    implicit val req = authReq.vrequest
+    Ok(views.html.emailForm(Binding(SendEmailForm))) 
+  }
+  
+  def sendEmailP = Authenticated { authReq =>
+    implicit val req = authReq.vrequest
+    implicit val user = authReq.user
+    Binding(SendEmailForm, req) match {
+      case ib: InvalidBinding => Ok(views.html.emailForm(ib))
+      case vb: ValidBinding => {
+        val recipients = List(vb.valueOf(SendEmailForm.email)).toArray
+        println(recipients.length)
+        val subject = vb.valueOf(SendEmailForm.subject)
+        val message = vb.valueOf(SendEmailForm.message)
+        val senderInfo = user.fullName + { user.email match { case None => "."; case Some(e) => s" at $e."} }
+        Email.sendEmail(senderInfo, recipients, subject, message)
+        Redirect(routes.Application.sendEmail).flashing(("success" -> "Email Sent!"))
+      }
+    }
+  }
 }
 
 case class DistrictInfo(district: District, schools: List[(String, BigDecimal, Set[String])], students: List[(Int, List[(Int, StudentId, BigDecimal)])])

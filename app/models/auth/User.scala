@@ -55,7 +55,7 @@ class User {
   
   //TODO: check email validity
   private[this] var _email: String = _
-  def email: Option[String] = Option(_email)
+  def email: Option[String] = if(_email == null || _email == "") None else  Some(_email)
   def email_=(theEmail: Option[String]) { _email = theEmail.getOrElse(null) }
   def email_=(theEmail: String) { _email = theEmail }
   

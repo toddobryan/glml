@@ -44,7 +44,7 @@ object TestData {
     
     // Coaches
     if(debug) println("Creating coaches...")
-    val coach1 = new User("coach1", "Becky", "Wahl", email="becky@abc.com", password="pw")
+    val coach1 = new User("coach1", "Kris", "Tatro", email="tatro@abc.com", password="pw")
     val coach2 = new User("coach2", "Ron", "Newton", password="pw")
     val coach3 = new User("coach3", "Mary", "Eschels", email="mary@abc.com", password="pw")
     val coach4 = new User("coach4", "Emily", "David")
