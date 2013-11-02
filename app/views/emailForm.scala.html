@@ -1,5 +1,5 @@
-@(emailForm: forms.Binding)(implicit req: models.auth.VisitRequest[_])
+@(emailForm: org.dupontmanual.forms.Binding)(implicit req: models.auth.VisitRequest[_])
 
 @main("Send an Email") {
-  @emailForm.asHtml
+  @emailForm.render(legend = Some("Send an email!"))
 }

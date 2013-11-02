@@ -80,7 +80,7 @@ class SchoolId {
   def getValidId(grade: Int): String = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QStudentId.candidate
-    val studentIds = pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList().filter(stuId => stuId.grade == grade)
+    val studentIds = getCurrentStudentIds.filter(stuId => stuId.grade == grade)
     val unusedIds = List.range(1, 99) diff studentIds.map((stuId: StudentId) => stuId.glmlId.substring(4).toInt)
     val id = unusedIds.min.toString
     
@@ -88,6 +88,20 @@ class SchoolId {
     else id
   }
 
+  def getCurrentStudentIds: List[StudentId] = {
+    val cand = QStudentId.candidate
+    DataStore.pm.query[StudentId].filter(cand.schoolId.eq(this)).executeList
+  }
+  
+  def getStudentsForYear(year: Year): List[StudentId] = {
+    val cand = QStudentId.candidate
+    val schoolVar = QSchoolId.variable("school")
+    val districtVar = QDistrict.variable("district")
+    DataStore.pm.query[StudentId].filter(cand.schoolId.eq(schoolVar).and(
+    									 schoolVar.school.eq(this.school)).and(
+    									 schoolVar.district.eq(districtVar)).and(
+    									 districtVar.year.eq(year))).executeList
+  }
 }
 
 object SchoolId {
@@ -115,6 +129,19 @@ object SchoolId {
     val schoolIds = DataStore.pm.query[SchoolId].filter(cand.district.eq(varble).and(
         varble.year.eq(year))).executeList().filter(_.coaches.contains(user))
     if (!schoolIds.isEmpty) schoolIds(0) else null
+  }
+  
+  def getCurrentSchoolIdBySchool(school: School, maybeYear: Option[Year] = None): Option[SchoolId] = {
+    val year = maybeYear.getOrElse(Year.currentYear)
+    val cand = QSchoolId.candidate
+    val varble = QDistrict.variable("District")
+    DataStore.pm.query[SchoolId].filter(cand.district.eq(varble).and(
+        varble.year.eq(year)).and(cand.school.eq(school))).executeOption
+  }
+  
+  def getByGlmlId(id: String): Option[SchoolId] = {
+    val cand = QSchoolId.candidate
+    DataStore.pm.query[SchoolId].filter(cand.glmlId.eq(id)).executeOption
   }
 }
 

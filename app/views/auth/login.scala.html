@@ -1,5 +1,5 @@
-@(loginForm: forms.Binding)(implicit req: models.auth.VisitRequest[_])
+@(loginForm: org.dupontmanual.forms.Binding)(implicit req: models.auth.VisitRequest[_])
 
 @main("Login") {
-  @loginForm.asHtml
+  @loginForm.render()
 }

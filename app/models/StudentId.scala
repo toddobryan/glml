@@ -30,6 +30,14 @@ class StudentId {
     grade_=(grade)
   }
   
+  def this(student: Student, schoolId: SchoolId, grade: Int) {
+    this()
+    glmlId_=(StudentId.getGlmlId(schoolId, grade))
+    student_=(student)
+    schoolId_=(schoolId)
+    grade_=(grade)
+  }
+  
   def id: Long = _id
   
   def glmlId: String = _glmlId
@@ -44,10 +52,20 @@ class StudentId {
   def grade: Int = _grade
   def grade_=(theGrade: Int) { _grade = theGrade }
   
+  def name = {student.firstName + " " + student.lastName}
+  
   def getCumulativeScore(): BigDecimal = {
     val pm: ScalaPersistenceManager = DataStore.pm
     val cand = QTest.candidate
     pm.query[Test].filter(cand.studentId.eq(this)).executeList().foldLeft(BigDecimal(0.0))((sum, test) => test.score + sum)
+  }
+  
+  def promoted: StudentId = { 
+    val newGlml = glmlId.substring(0, 3) + (grade - 7) + glmlId.substring(4, 6)
+    // Using promoted requires that a current school id currently exists for the school
+    // this student belongs to. Otherwise, null
+    val currSchoolId = SchoolId.getCurrentSchoolIdBySchool(schoolId.school).getOrElse(null)
+    new StudentId(student, currSchoolId, grade + 1) 
   }
   
   override def toString: String = "%s: %s (%s)".format(schoolId.district.year.slug, student, glmlId)		  
@@ -71,6 +89,25 @@ object StudentId {
         newStudentId
       }
     }
+  }
+  
+  def getByGlmlId(studentId: String): Option[StudentId] = {
+    val cand = QStudentId.candidate
+    DataStore.pm.query[StudentId].filter(cand.glmlId.eq(studentId)).executeOption
+  }
+  
+  def promote(studentId: String): Option[StudentId] = {
+    val maybeStudent = getByGlmlId(studentId)
+    maybeStudent match {
+      case Some(s) => {
+        Some(DataStore.pm.makePersistent(s.promoted))
+      }
+      case None => None
+    }
+  }
+  
+  def getGlmlId(schoolId: SchoolId, grade: Int): String = {
+    schoolId.district.glmlId + schoolId.glmlId + (grade - 8) + schoolId.getValidId(grade)
   }
 }
 

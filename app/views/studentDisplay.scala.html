@@ -1,0 +1,6 @@
+@* studentDisplay Template File *@
+@(studentId: models.StudentId)(implicit req: models.auth.VisitRequest[_])
+
+@main(studentId.student.firstName + studentId.student.lastName) {
+  
+}

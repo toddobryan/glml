@@ -32,6 +32,7 @@ object TestData {
     
     // Districts
     if(debug) println("Creating districs...")
+    val district1in11 = new District("0", year2011)
     val district1 = new District("1", year2012)
     val district2 = new District("2", year2012)
     
@@ -53,6 +54,7 @@ object TestData {
 
     // School IDs
     if(debug) println("Creating schools IDs...")
+    val schId1in11 = new SchoolId("01", school1, district1in11, Set(coach1))
     val schId1 = new SchoolId("01", school1, district1, Set(coach1))
     val schId2 = new SchoolId("02", school2, district1, Set(coach2))
     val schId3 = new SchoolId("03", school3, district1, Set(coach3, coach4, coach5))
@@ -67,16 +69,21 @@ object TestData {
     val student5 = new Student("Thieneman", "Tanner", None, None)
     val student6 = new Student("Du", "Jian", None, None)
     val student7 = new Student("Finklestein", "Teddy", None, None)
+    val student8 = new Student("Miller", "Jim",  None, None)
+    val student9 = new Student("Hu", "Jiahui",  None, None)
     
     // Student IDs
     if(debug) println("Creating student IDs...")
-    val stuId1 = new StudentId("000001", student1, schId1, 12)
-    val stuId2 = new StudentId("000002", student2, schId1, 9)
-    val stuId3 = new StudentId("000003", student3, schId1, 12)
-    val stuId4 = new StudentId("000004", student4, schId1, 10)
-    val stuId5 = new StudentId("000005", student5, schId2, 12)
-    val stuId6 = new StudentId("000006", student6, schId3, 12)
-    val stuId7 = new StudentId("000007", student7, schId4, 12)
+    val stuId1 = new StudentId("101401", student1, schId1, 12)
+    val stuId2 = new StudentId("101101", student2, schId1, 9)
+    val stuId3 = new StudentId("101402", student3, schId1, 12)
+    val stuId4 = new StudentId("101201", student4, schId1, 10)
+    val stuId5 = new StudentId("102401", student5, schId2, 12)
+    val stuId6 = new StudentId("103401", student6, schId3, 12)
+    val stuId7 = new StudentId("204401", student7, schId4, 12)
+    println("flag")
+    val stuId8 = new StudentId("001201", student8, schId1in11, 10)
+    val stuId9 = new StudentId("001202", student9, schId1in11, 10)
 
     // Test Dates
     if(debug) println("Creating test dates...")
@@ -107,6 +114,7 @@ object TestData {
       pm.makePersistent(year2012)
       pm.makePersistent(district1)
       pm.makePersistent(district2)
+      pm.makePersistent(district1in11)
       pm.makePersistent(school1)
       pm.makePersistent(school2)
       pm.makePersistent(school3)
@@ -118,6 +126,7 @@ object TestData {
       pm.makePersistent(coach5)
       pm.makePersistent(coach6)
       pm.makePersistent(schId1)
+      pm.makePersistent(schId1in11)
       pm.makePersistent(schId2)
       pm.makePersistent(schId3)
       pm.makePersistent(schId4)
@@ -128,6 +137,8 @@ object TestData {
       pm.makePersistent(student5)
       pm.makePersistent(student6)
       pm.makePersistent(student7)
+      pm.makePersistent(student8)
+      pm.makePersistent(student9)
       pm.makePersistent(stuId1)
       pm.makePersistent(stuId2)
       pm.makePersistent(stuId3)
@@ -135,6 +146,8 @@ object TestData {
       pm.makePersistent(stuId5)
       pm.makePersistent(stuId6)
       pm.makePersistent(stuId7)
+      pm.makePersistent(stuId8)
+      pm.makePersistent(stuId9)
       pm.makePersistent(date1)
       pm.makePersistent(date2)
       pm.makePersistent(test1)

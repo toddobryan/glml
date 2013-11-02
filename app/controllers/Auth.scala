@@ -1,6 +1,7 @@
 package controllers
 
 import play.api.mvc.{Controller, AnyContent}
+import org.dupontmanual.forms
 import forms.{Form, ValidBinding}
 import forms.fields.{TextField, PasswordField}
 import models.auth.{VisitAction, VisitRequest, Authenticated, AuthVisitRequest}
@@ -28,8 +29,6 @@ class ChangePasswordForm(val user: User) extends Form {
   val oldPw = new PasswordField("Current Password")
   val newPw = new PasswordField("New Password")
   val newPwConfirm = new PasswordField("Confirm New Password")
-  override def postAddress = "/changeSettings/changePassword"
-  override def legend = Some("Change Password")
     
   val fields = List(oldPw, newPw, newPwConfirm)
   
@@ -43,8 +42,6 @@ class ChangePasswordForm(val user: User) extends Form {
 object ChangeEmailForm extends Form {
   val newE = new TextField("New Email")
   val newEConfirm = new TextField("Confirm New Email")
-  override def postAddress = "/changeSettings/changeEmail"
-  override def legend = Some("Change Email")
   
   val fields = List(newE, newEConfirm)
   
@@ -55,20 +52,20 @@ object ChangeEmailForm extends Form {
 }
 
 object Auth extends Controller {
-  def login() = VisitAction { implicit req => 
-    if (req.method == Method.GET) {
-      Ok(views.html.auth.login(Binding(LoginForm)))
-    } else {
-      Binding(LoginForm, req) match {
-        case ib: InvalidBinding => Ok(views.html.auth.login(ib))
-        case vb: ValidBinding => {
-          // set the session user
-          req.visit.user = User.getByUsername(vb.valueOf(LoginForm.username))
-          val redirectUrl: Option[String] = req.visit.redirectUrl
-          req.visit.redirectUrl = None
-          DataStore.pm.makePersistent(req.visit)
-          redirectUrl.map(Redirect(_)).getOrElse(Redirect(routes.Application.index)).flashing("success" -> "You have successfully logged in.")
-        }
+  def login() = VisitAction { implicit req =>
+    Ok(views.html.auth.login(Binding(LoginForm)))
+  }
+  
+  def loginP() = VisitAction { implicit req => 
+    Binding(LoginForm, req) match {
+      case ib: InvalidBinding => Ok(views.html.auth.login(ib))
+      case vb: ValidBinding => {
+        // set the session user
+        req.visit.user = User.getByUsername(vb.valueOf(LoginForm.username))
+        val redirectUrl: Option[String] = req.visit.redirectUrl
+        req.visit.redirectUrl = None
+        DataStore.pm.makePersistent(req.visit)
+        redirectUrl.map(Redirect(_)).getOrElse(Redirect(routes.Application.index)).flashing("success" -> "You have successfully logged in.")
       }
     }
   }

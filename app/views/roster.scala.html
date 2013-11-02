@@ -1,0 +1,31 @@
+@* roster Template File *@
+@(roster: List[models.StudentId], newStudentForm: org.dupontmanual.forms.Binding, promoteForm: org.dupontmanual.forms.Binding)(implicit req: models.auth.VisitRequest[_])
+
+@import org.dupontmanual.forms.FormCall
+@import play.api.mvc.Call
+
+@main("Modify Your Roster") {
+  <div class="span6">
+  @newStudentForm.render(legend = Some("Add a Student to the Team"),
+  						 overrideSubmit = Some(FormCall(Call("POST", "/roster/addNewStudent"))))
+  @promoteForm.render(legend = Some("Promote a Student from Last Year"),
+  					  overrideSubmit = Some(FormCall(Call("POST", "/roster/promoteStudent"))))
+  </div>
+  <div class="span6">
+    <h3>Current Roster</h3>
+    <table class="table table-striped span12">
+      <tr>
+        <th>Student Name</th>
+        <th>Grade</th>
+        <th>GLML Id</th>
+      </tr>
+      @for(stu <- roster) {
+        <tr>
+          <td>@stu.name</td>
+          <td>@stu.grade</td>
+          <td>@stu.glmlId</td>
+        </tr>
+      }
+    </table>
+  </div>
+}

@@ -5,6 +5,8 @@
     <li><a href={ controllers.routes.Auth.login().toString }>Log in</a></li>
   }
   case Some(user) => {
+  	<li class="disabled"><a href="#">Welcome {user.fullName}</a></li>
+  	<li><a href={ controllers.routes.Auth.changeSettings().toString }>Change Settings</a></li> 
     <li><a href={ controllers.routes.Auth.logout().toString }>Log out</a></li>
   }
 })

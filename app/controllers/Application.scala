@@ -13,6 +13,7 @@ import org.datanucleus.query.typesafe._
 import scalajdo.ScalaPersistenceManager
 import scalajdo.DataStore
 
+import org.dupontmanual.forms
 import forms._
 import forms.fields._
 import forms.widgets.Textarea
@@ -76,10 +77,9 @@ object Application extends Controller {
        ).filter(_._2.isDefined
        // Convert Option[String] to String
        ).map(t => (t._1, t._2.get))
-    val email = new ChoiceField[String]("Email", emailOptions)
+    val email = new ChoiceFieldMultiple[String]("Email", emailOptions)
     val subject = new TextField("subject")
     val message = new TextField("message") { override def widget = new Textarea(true) }
-    override def legend = Some("Send an Email")
     
     val fields = List(email, subject, message)
   }
@@ -95,14 +95,92 @@ object Application extends Controller {
     Binding(SendEmailForm, req) match {
       case ib: InvalidBinding => Ok(views.html.emailForm(ib))
       case vb: ValidBinding => {
-        val recipients = List(vb.valueOf(SendEmailForm.email)).toArray
-        println(recipients.length)
+        val recipients = vb.valueOf(SendEmailForm.email).toArray
         val subject = vb.valueOf(SendEmailForm.subject)
         val message = vb.valueOf(SendEmailForm.message)
         val senderInfo = user.fullName + { user.email match { case None => "."; case Some(e) => s" at $e."} }
         Email.sendEmail(senderInfo, recipients, subject, message)
         Redirect(routes.Application.sendEmail).flashing(("success" -> "Email Sent!"))
       }
+    }
+  }
+  
+  object NewStudentForm extends Form {
+    val firstName = new TextField("First Name")
+    val lastName = new TextField("Last Name")
+    val grade = new ChoiceField("Grade", List(("9", 9), ("10", 10), ("11", 11), ("12", 12)), false)
+    val fields = List(firstName, lastName, grade)
+  }
+  
+  class PromoteStudentForm(val user: User) extends Form {
+    val currSchoolId = SchoolId.getCurrentSchoolId(user)
+    val studList = Year.lastYear match {
+      case None => Nil
+      case Some(y) => currSchoolId.getStudentsForYear(y).filter(
+    		  			stu => !currSchoolId.getCurrentStudentIds.exists(s => s.student == stu.student)
+    		  			).map(
+    		  			stu => {
+    		  			  import stu.student
+    		  			  val str = student.firstName + student.lastName + " - " + stu.glmlId
+    		  			  (str, stu)
+    		  			})
+    }
+    val oldStudents = new ChoiceField("Last Years Students", studList, true)
+    
+    val fields = List(oldStudents)
+  }
+  
+  def roster = Authenticated { implicit auth => 
+    val user = auth.user
+    implicit val req = auth.vrequest
+    val schoolId = SchoolId.getCurrentSchoolId(user)
+    val currentStudents = schoolId.getCurrentStudentIds
+    Ok(views.html.roster(currentStudents, Binding(NewStudentForm), Binding(new PromoteStudentForm(user))))
+  }
+  
+  def addNewStudent = Authenticated { implicit auth =>
+    implicit val (req, user) = (auth.vrequest, auth.user)
+    val schoolId = SchoolId.getCurrentSchoolId(user)
+    val currentStudents = schoolId.getCurrentStudentIds
+    Binding(NewStudentForm, req) match {
+      case ib: InvalidBinding => Ok(views.html.roster(currentStudents, ib, Binding(new PromoteStudentForm(user))))
+      case vb: ValidBinding => {
+        import NewStudentForm._
+        val stud = new Student(vb.valueOf(lastName), vb.valueOf(firstName), None, None)
+        val newStudent = new StudentId(stud, schoolId, vb.valueOf(grade))
+        DataStore.pm.makePersistent(newStudent)
+        Redirect(routes.Application.roster).flashing("success" -> "Successfully Added!")
+      }
+    }
+  }
+  
+  def promoteStudent = Authenticated { implicit auth => 
+    implicit val (req, user) = (auth.vrequest, auth.user)
+    val schoolId = SchoolId.getCurrentSchoolId(user)
+    val currentStudents = schoolId.getCurrentStudentIds
+    Binding(new PromoteStudentForm(user), req) match {
+      case ib: InvalidBinding => Ok(views.html.roster(currentStudents, Binding(NewStudentForm), ib))
+      case vb: ValidBinding => {
+        val student: StudentId = vb.valueOf((new PromoteStudentForm(user)).oldStudents)
+        DataStore.pm.makePersistent(student.promoted)
+        Redirect(routes.Application.roster).flashing("success" -> "Successfully Added!")
+      }
+    }
+  }
+  
+  def schoolInfo(schoolId: String) = VisitAction { implicit req => 
+    val maybeSchool = SchoolId.getByGlmlId(schoolId)
+    maybeSchool match {
+      case Some(sid) => Ok(views.html.schoolDisplay(sid))
+      case None => Redirect(routes.Application.index).flashing(("error" -> "School Not Found"))
+    }
+  }
+  
+  def studentInfo(studentId: String) = VisitAction { implicit req => 
+    val maybeStudent = StudentId.getByGlmlId(studentId)
+    maybeStudent match {
+      case Some(sid) => Ok(views.html.studentDisplay(sid))
+      case None => Redirect(routes.Application.index).flashing(("error" -> "Student Not Found"))
     }
   }
 }

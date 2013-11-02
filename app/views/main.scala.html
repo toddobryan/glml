@@ -40,12 +40,11 @@
                 <li class="active">
                   <a href="/">Home</a>
                 </li>
-                <li class="">
-                  <a href="/archive">Archive</a>
-                </li>
-                <li class="">
-                  <a href="/hallOfFame">Hall of Fame</a>
-                </li>
+                @if(req.visit.user.isDefined) {
+                  <li>
+                    <a href="/roster">Modify Roster</a>
+                  </li>
+                }
               </ul>
               <ul class="nav pull-right">
                 @loginInfo()

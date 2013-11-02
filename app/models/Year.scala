@@ -38,6 +38,13 @@ object Year {
     val years: List[Year] = pm.query[Year].orderBy(cand.start.desc).executeList()
     if (!years.isEmpty) years(0) else throw new Exception("There is no current year!")
   }
+  
+  def lastYear: Option[Year] = {
+    val pm = DataStore.pm
+    val cand = QYear.candidate
+    val years: List[Year] = pm.query[Year].orderBy(cand.start.desc()).executeList
+    if(years.isDefinedAt(1)) Some(years(1)) else None
+  }
 }
 
 trait QYear extends PersistableExpression[Year] {

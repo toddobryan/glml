@@ -1,6 +1,12 @@
-@(changePwForm: forms.Binding, changeEmailForm: forms.Binding)(implicit req: models.auth.VisitRequest[_])
+@(changePwForm: org.dupontmanual.forms.Binding, 
+				changeEmailForm: org.dupontmanual.forms.Binding)(implicit req: models.auth.VisitRequest[_])
+
+@import org.dupontmanual.forms.FormCall
+@import play.api.mvc.Call
 
 @main("Change Settings") {
-  @changePwForm.asHtml
-  @changeEmailForm.asHtml
+  @changePwForm.render(legend = Some("Change Your Password"),
+  					   overrideSubmit = Some(FormCall(Call("POST", "/changeSettings/changePassword"))))
+  @changeEmailForm.render(legend = Some("Change Your Email"), 
+  						  overrideSubmit = Some(FormCall(Call("POST", "/changeSettings/changeEmail"))))
 }

@@ -31,6 +31,8 @@ object ApplicationBuild extends Build {
     "org.datanucleus" % "datanucleus-rdbms" % "3.1.4",
     "org.datanucleus" % "datanucleus-jodatime" % "3.1.1",
 
+    "org.dupontmanual" %% "dm-forms" % "0.1-SNAPSHOT",
+    
     "com.typesafe.akka" % "akka-actor" % "2.0.1"
   )
 
@@ -39,6 +41,7 @@ object ApplicationBuild extends Build {
     // Add your own project settings here
     ((resolvers += "Sonatype Public" at "https://oss.sonatype.org/content/groups/public/") +:
      (resolvers += "Java.net" at "http://download.java.net/maven/2/") +:
+     (resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") +:
      (scalaVersion := "2.10.2") +:
      (javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-bootclasspath", "/usr/lib/jvm/java-6-oracle/jre/lib/rt.jar")) +:
      (scalacOptions ++= Seq("-deprecation", "-feature")) +:

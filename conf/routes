@@ -8,11 +8,16 @@ GET     /$year<\d{4}>-$month<\d{1,2}>-$day<\d{1,2}> controllers.Application.inde
 
 # Auth
 GET     /login                      	controllers.Auth.login
-POST    /login                      	controllers.Auth.login
+POST    /login                      	controllers.Auth.loginP
 GET     /logout                     	controllers.Auth.logout
 GET		/changeSettings					controllers.Auth.changeSettings
 POST	/changeSettings/changeEmail		controllers.Auth.changeEmail
 POST	/changeSettings/changePassword	controllers.Auth.changePassword
+
+# Adding Students
+GET		/roster							controllers.Application.roster
+POST	/roster/addNewStudent			controllers.Application.addNewStudent
+POST	/roster/promoteStudent			controllers.Application.promoteStudent
 
 # Email
 GET 	/sendEmail						controllers.Application.sendEmail
