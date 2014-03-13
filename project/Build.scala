@@ -10,11 +10,11 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
-    "org.scala-lang" % "scala-compiler" % "2.10.2",
-    "org.scala-lang" % "scala-swing" % "2.10.2",
-    "org.scala-lang" % "scala-actors" % "2.10.2",
-    "org.scalatest" % "scalatest_2.10" % "2.0.M5b" % "test",
-    "commons-codec" % "commons-codec" % "1.6",
+    "org.scala-lang" % "scala-compiler" % "2.10.3",
+    "org.scala-lang" % "scala-swing" % "2.10.3",
+    "org.scala-lang" % "scala-actors" % "2.10.3",
+    "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
+    "commons-codec" % "commons-codec" % "1.8",
     "javax.mail" % "mail" % "1.4.5",
     "org.mindrot" % "jbcrypt" % "0.3m",
     
@@ -31,7 +31,7 @@ object ApplicationBuild extends Build {
     "org.datanucleus" % "datanucleus-rdbms" % "3.1.4",
     "org.datanucleus" % "datanucleus-jodatime" % "3.1.1",
 
-    "org.dupontmanual" %% "dm-forms" % "0.1-SNAPSHOT",
+    "org.dupontmanual" %% "dm-forms" % "0.2-SNAPSHOT",
     
     "com.typesafe.akka" % "akka-actor" % "2.0.1"
   )
