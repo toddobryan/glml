@@ -10,10 +10,10 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
-    "org.scala-lang" % "scala-compiler" % "2.10.4",
-    "org.scala-lang" % "scala-swing" % "2.10.4",
-    "org.scala-lang" % "scala-actors" % "2.10.4",
-    "org.scalatest" % "scalatest_2.10" % "2.1.1" % "test",
+    "org.scala-lang" % "scala-compiler" % "2.10.3",
+    "org.scala-lang" % "scala-swing" % "2.10.3",
+    "org.scala-lang" % "scala-actors" % "2.10.3",
+    "org.scalatest" %% "scalatest" % "2.1.1" % "test",
     "commons-codec" % "commons-codec" % "1.9",
     "javax.mail" % "mail" % "1.4.7",
     "org.mindrot" % "jbcrypt" % "0.3m",
@@ -38,16 +38,15 @@ object ApplicationBuild extends Build {
 
 
     val main = play.Project(appName, appVersion, appDependencies).settings(
-      (Seq(parallelExecution in Test := false,
+      Seq(parallelExecution in Test := false,
           testOptions in Test += Tests.Argument("-oDF"),
           scalaVersion := "2.10.3",
           javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-bootclasspath", "/usr/lib/jvm/java-6-oracle/jre/lib/rt.jar"),
           scalacOptions ++= Seq("-deprecation", "-feature"),
           routesImport += "scala.language.reflectiveCalls",
-          resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
-      Nucleus.settings): _*).dependsOn(users, courses)
-)
-
+          resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") ++
+      Nucleus.settings: _*)
+}
 
 object Nucleus {
   
