@@ -10,51 +10,44 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     jdbc,
-    "org.scala-lang" % "scala-compiler" % "2.10.3",
-    "org.scala-lang" % "scala-swing" % "2.10.3",
-    "org.scala-lang" % "scala-actors" % "2.10.3",
-    "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
-    "commons-codec" % "commons-codec" % "1.8",
-    "javax.mail" % "mail" % "1.4.5",
+    "org.scala-lang" % "scala-compiler" % "2.10.4",
+    "org.scala-lang" % "scala-swing" % "2.10.4",
+    "org.scala-lang" % "scala-actors" % "2.10.4",
+    "org.scalatest" % "scalatest_2.10" % "2.1.1" % "test",
+    "commons-codec" % "commons-codec" % "1.9",
+    "javax.mail" % "mail" % "1.4.7",
     "org.mindrot" % "jbcrypt" % "0.3m",
     
     "org.apache.poi" % "poi" % "3.9",
     "org.apache.poi" % "poi-ooxml" % "3.9",
     "org.apache.poi" % "poi-ooxml-schemas" % "3.9",
 
-    "com.h2database" % "h2" % "1.3.166",
+    "com.h2database" % "h2" % "1.3.175",
     "javax.jdo" % "jdo-api" % "3.0",
-    "org.datanucleus" % "datanucleus-core" % "3.1.4",
-    "org.datanucleus" % "datanucleus-api-jdo" % "3.1.3",
+    "org.datanucleus" % "datanucleus-core" % "3.2.13",
+    "org.datanucleus" % "datanucleus-api-jdo" % "3.2.8",
     "org.datanucleus" % "datanucleus-enhancer" % "3.1.1",
     "org.datanucleus" % "datanucleus-jdo-query" % "3.0.2",
-    "org.datanucleus" % "datanucleus-rdbms" % "3.1.4",
-    "org.datanucleus" % "datanucleus-jodatime" % "3.1.1",
+    "org.datanucleus" % "datanucleus-rdbms" % "3.2.12",
+    "org.datanucleus" % "datanucleus-jodatime" % "3.2.1",
 
     "org.dupontmanual" %% "dm-forms" % "0.2-SNAPSHOT",
     
-    "com.typesafe.akka" % "akka-actor" % "2.0.1"
+    "com.typesafe.akka" %% "akka-actor" % "2.0.3"
   )
 
 
-  val main = play.Project(appName, appVersion, appDependencies).settings(
-    // Add your own project settings here
-    ((resolvers += "Sonatype Public" at "https://oss.sonatype.org/content/groups/public/") +:
-     (resolvers += "Java.net" at "http://download.java.net/maven/2/") +:
-     (resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") +:
-     (scalaVersion := "2.10.2") +:
-     (javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-bootclasspath", "/usr/lib/jvm/java-6-oracle/jre/lib/rt.jar")) +:
-     (scalacOptions ++= Seq("-deprecation", "-feature")) +:
-      Nucleus.settings): _*
-    
-  )
-/*    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      ((resolvers += "t2v.jp repo" at "http://www.t2v.jp/maven-repo/") +:
-       (testOptions in Test := Nil) +: 
-       Nucleus.settings): _*
-    )
-*/
-}
+    val main = play.Project(appName, appVersion, appDependencies).settings(
+      (Seq(parallelExecution in Test := false,
+          testOptions in Test += Tests.Argument("-oDF"),
+          scalaVersion := "2.10.3",
+          javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-bootclasspath", "/usr/lib/jvm/java-6-oracle/jre/lib/rt.jar"),
+          scalacOptions ++= Seq("-deprecation", "-feature"),
+          routesImport += "scala.language.reflectiveCalls",
+          resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+      Nucleus.settings): _*).dependsOn(users, courses)
+)
+
 
 object Nucleus {
   
@@ -70,7 +63,7 @@ object Nucleus {
     // let ivy know about our "nucleus" config
     ivyConfigurations += Config,
     // add the enhancer dependency to our nucleus ivy config
-    libraryDependencies += "org.datanucleus" % "datanucleus-enhancer" % "3.0.1" % Config.name,
+    libraryDependencies += "org.datanucleus" % "datanucleus-enhancer" % "3.1.1" % Config.name,
     // fetch the classpath for our nucleus config
     // as we inherit Compile this will be the fullClasspath for Compile + "datanucleus-enhancer" jar 
     //fullClasspath in Config <<= (classpathTypes in enhance, update).map{(ct, report) =>
